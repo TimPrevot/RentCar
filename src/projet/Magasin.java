@@ -38,6 +38,22 @@ public class Magasin {
                 }
             }
         }
-
+        scanner.close();
+    }
+    public void reSouscrireProgramme(Client client){
+        Scanner scanner = new Scanner(System.in);
+        Scanner scanner1 = new Scanner(System.in);
+        System.out.println("Voulez vous souscrire votre abonnement pour une année supplémentaire ?");
+        String choixClient = scanner.nextLine();
+        if (choixClient == "N"){
+            System.out.println("Votre souscription au programme fidélité est terminée.");
+        }
+        else if (choixClient == "Y"){
+            System.out.println("De combien d'années supplémentaires voulez vous souscrire ?");
+            int duree = scanner1.nextInt();
+                client.prolongerFidele(duree);
+        }
+        scanner.close();
+        scanner1.close();
     }
 }

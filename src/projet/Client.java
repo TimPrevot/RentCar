@@ -124,4 +124,8 @@ public class Client {
         this.dateDebutFidele = java.time.LocalDate.now();
         this.dateFinFidele = java.time.LocalDate.now().plusYears(1);
     }
+
+    public void prolongerFidele(int duree){
+        this.dateFinFidele.plusYears(duree);
+    }
 }
