@@ -1,5 +1,7 @@
 package projet;
 
+import java.util.List;
+
 public class Employe {
     private int ID;
     private static int count;
@@ -13,6 +15,7 @@ public class Employe {
     private String login;
     private String password;
     private boolean estChauffeur;
+    private List<Agence> circuit;
 
     public Employe(String nom, String prenom, String email, String rue, String ville, String codePostal, String telephone) {
         this.ID = count++;

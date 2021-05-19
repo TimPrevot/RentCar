@@ -8,25 +8,21 @@ public class Vehicule {
     private int kilometrage;
     private boolean boiteAuto;
     private boolean climatisation;
-    private int prixJour;
-    private int caution;
     private boolean estLoue;
     private boolean aDeplacer;
     private Agence agenceActuelle;
     private Client clientActuel;
     private String carburant;
-    private String categorie;
+    private Categorie categorie;
     private Agence nouvelleAgence;
 
-    public Vehicule(String marque, String modele, int kilometrage, boolean boiteAuto, boolean climatisation, int prixJour, int caution, String carburant, String categorie) {
+    public Vehicule(String marque, String modele, int kilometrage, boolean boiteAuto, boolean climatisation, String carburant, Categorie categorie) {
         this.ID = count ++;
         this.marque = marque;
         this.modele = modele;
         this.kilometrage = kilometrage;
         this.boiteAuto = boiteAuto;
         this.climatisation = climatisation;
-        this.prixJour = prixJour;
-        this.caution = caution;
         this.carburant = carburant;
         this.categorie = categorie;
     }
@@ -75,22 +71,6 @@ public class Vehicule {
         this.climatisation = climatisation;
     }
 
-    public int getPrixJour() {
-        return prixJour;
-    }
-
-    public void setPrixJour(int prixJour) {
-        this.prixJour = prixJour;
-    }
-
-    public int getCaution() {
-        return caution;
-    }
-
-    public void setCaution(int caution) {
-        this.caution = caution;
-    }
-
     public boolean isEstLoue() {
         return estLoue;
     }
@@ -131,11 +111,11 @@ public class Vehicule {
         this.carburant = carburant;
     }
 
-    public String getCategorie() {
+    public Categorie getCategorie() {
         return categorie;
     }
 
-    public void setCategorie(String categorie) {
+    public void setCategorie(Categorie categorie) {
         this.categorie = categorie;
     }
 
