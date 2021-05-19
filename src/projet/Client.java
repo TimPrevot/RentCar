@@ -34,6 +34,10 @@ public class Client {
         this.ID = count++;
     }
 
+    public int getID() {
+        return ID;
+    }
+
     public String getNom() {
         return nom;
     }
@@ -116,6 +120,17 @@ public class Client {
 
     public ProgrammeFidelite getProgrammeSuivi() {
         return programmeSuivi;
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "ID=" + ID +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                '}';
     }
 
     public void souscrireFidele(ProgrammeFidelite nouveauProgramme){

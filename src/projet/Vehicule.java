@@ -31,6 +31,8 @@ public class Vehicule {
         this.ID = count++;
     }
 
+    public int getID(){  return ID;  }
+
     public String getMarque() {
         return marque;
     }
@@ -125,5 +127,25 @@ public class Vehicule {
 
     public void setNouvelleAgence(Agence nouvelleAgence) {
         this.nouvelleAgence = nouvelleAgence;
+    }
+
+    @Override
+    public String toString() {
+        return "Vehicule{" +
+                "ID=" + ID +
+                ", marque='" + marque + '\'' +
+                ", modele='" + modele + '\'' +
+                ", kilometrage=" + kilometrage +
+                ", boiteAuto=" + boiteAuto +
+                ", climatisation=" + climatisation +
+                ", estLoue=" + estLoue +
+                ", aDeplacer=" + aDeplacer +
+                ", carburant='" + carburant + '\'' +
+                '}';
+    }
+
+    public void louer(){
+        estLoue = true;
+
     }
 }
