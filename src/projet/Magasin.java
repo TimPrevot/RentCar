@@ -12,6 +12,7 @@ public class Magasin {
     private List<Agence> listeAgences;
     private List<ProgrammeFidelite> listeProgrammesFidelite;
     private List<Vehicule> listeLocations;
+    private List<Categorie> listeCategorie
 
     // Constructeur par défaut
     public Magasin() {}
@@ -32,6 +33,50 @@ public class Magasin {
             vehiculeString = vehicule.toString();
             System.out.println(vehiculeString);
         }
+    }
+
+    //Affichage des véhicules par catégorie
+    public void afficherCategorie(){
+        Scanner scanner = new Scanner(System.in);
+        String affichCategorie;
+        for (Categorie categorie : listeCategorie){
+            affichCategorie = categorie.getNom();
+            System.out.println(affichCategorie);
+        }
+        System.out.println("Veuillez sélectionner la catégorie à afficher");
+        String vehiculeCategorie;
+        String choixCategorie = scanner.nextLine();
+        if (choixCategorie.equals("eco")){
+            for (Vehicule vehicule : listeVehicules){
+                if (vehicule.getCategorie().getNom().equals("eco")){
+                    vehiculeCategorie = vehicule.toString();
+                    System.out.println(vehiculeCategorie);
+                }
+            }
+        }
+        else if(choixCategorie.equals("confort")){
+            for (Vehicule vehicule : listeVehicules){
+                if (vehicule.getCategorie().getNom().equals("confort")){
+                    vehiculeCategorie = vehicule.toString();
+                    System.out.println(vehiculeCategorie);
+                }
+            }
+        }
+        else if(choixCategorie.equals("luxe")){
+            for (Vehicule vehicule : listeVehicules){
+                if (vehicule.getCategorie().getNom().equals("luxe")){
+                    vehiculeCategorie = vehicule.toString();
+                    System.out.println(vehiculeCategorie);
+                }
+            }
+        }
+
+        scanner.close();
+    }
+
+    //Affichage par marque de véhicule
+    public void afficherMarque(){
+        
     }
 
     //Affichage de la liste des clients de l'agence
