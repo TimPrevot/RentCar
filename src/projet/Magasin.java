@@ -137,6 +137,17 @@ public class Magasin {
         scanner.close();
     }
 
+    //Afficher les véhicules en cours de location
+    public void afficherLoue(){
+        String vehiculeLoue;
+        for (Vehicule vehicule : listeVehicules){
+            if (vehicule.isEstLoue()){
+                vehiculeLoue = vehicule.toString();
+                System.out.println(vehiculeLoue);
+            }
+        }
+    }
+
     //Affichage de la liste des clients de l'agence
     public void afficherClients(){
         String clientString;
