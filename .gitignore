@@ -108,3 +108,5 @@ modules.xml
 
 /.idea
 src/connect_db/ConnectDB.java
+
+src/connect_db/CreateTable.java
