@@ -12,7 +12,7 @@ public class Magasin {
     private List<Agence> listeAgences;
     private List<ProgrammeFidelite> listeProgrammesFidelite;
     private List<Vehicule> listeLocations;
-    private List<Categorie> listeCategorie
+    private List<Categorie> listeCategorie;
 
     // Constructeur par défaut
     public Magasin() {}
@@ -76,7 +76,65 @@ public class Magasin {
 
     //Affichage par marque de véhicule
     public void afficherMarque(){
-        
+        Scanner scanner = new Scanner(System.in);
+        String affichMarque;
+        for (Vehicule vehicule : listeVehicules){
+            affichMarque = vehicule.getMarque();
+            System.out.println(affichMarque);
+        }
+        System.out.println("Veuillez sélectionner la marque du véhicule à afficher");
+        String vehiculeMarque;
+        String choixMarque = scanner.nextLine();
+        if (choixMarque.equals("Honda")){
+            for (Vehicule vehicule : listeVehicules){
+                if (vehicule.getMarque().equals("Honda")){
+                    vehiculeMarque = vehicule.toString();
+                    System.out.println(vehiculeMarque);
+                }
+            }
+        }
+        else if(choixMarque.equals("Renault")){
+            for (Vehicule vehicule : listeVehicules){
+                if (vehicule.getMarque().equals("Renault")){
+                    vehiculeMarque = vehicule.toString();
+                    System.out.println(vehiculeMarque);
+                }
+            }
+        }
+        else if(choixMarque.equals("Citroën")){
+            for (Vehicule vehicule : listeVehicules){
+                if (vehicule.getMarque().equals("Citroën")){
+                    vehiculeMarque = vehicule.toString();
+                    System.out.println(vehiculeMarque);
+                }
+            }
+        }
+        else if(choixMarque.equals("Mazda")){
+            for (Vehicule vehicule : listeVehicules){
+                if (vehicule.getMarque().equals("Mazda")){
+                    vehiculeMarque = vehicule.toString();
+                    System.out.println(vehiculeMarque);
+                }
+            }
+        }
+        else if(choixMarque.equals("Mercedes")){
+            for (Vehicule vehicule : listeVehicules){
+                if (vehicule.getMarque().equals("Mercedes")){
+                    vehiculeMarque = vehicule.toString();
+                    System.out.println(vehiculeMarque);
+                }
+            }
+        }
+        else if(choixMarque.equals("Audi")){
+            for (Vehicule vehicule : listeVehicules){
+                if (vehicule.getMarque().equals("Audi")){
+                    vehiculeMarque = vehicule.toString();
+                    System.out.println(vehiculeMarque);
+                }
+            }
+        }
+
+        scanner.close();
     }
 
     //Affichage de la liste des clients de l'agence
