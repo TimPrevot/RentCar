@@ -20,6 +20,7 @@ public class Magasin {
     //Affichage de la liste des programmes de fidélité
     public void afficherProgrammes(){
         String programmeString;
+        //TODO EmptyListException
         for (ProgrammeFidelite programme : listeProgrammesFidelite){
             programmeString = programme.toString();
             System.out.println(programmeString);
@@ -29,6 +30,7 @@ public class Magasin {
     //Affichage de la liste des véhicules de l'agence
     public void afficherVehicules(){
         String vehiculeString;
+        //TODO EmptyListException
         for (Vehicule vehicule : listeVehicules){
             vehiculeString = vehicule.toString();
             System.out.println(vehiculeString);
@@ -151,6 +153,7 @@ public class Magasin {
     //Affichage de la liste des clients de l'agence
     public void afficherClients(){
         String clientString;
+        //TODO EmptyListException
         for (Client client : listeClients){
             clientString = client.toString();
             System.out.println(clientString);
@@ -163,11 +166,13 @@ public class Magasin {
         this.afficherProgrammes();
         System.out.println("Veuillez indiquer l'ID du programme auquel vous souhaitez souscrire, ou tapez 0 pour ne pas souscrire :");
         int choixClient = scanner.nextInt();
+        //TODO BadUserInputException
         if (choixClient == 0){
             System.out.println("Opération annulée");
         }
         else {
             for (ProgrammeFidelite programme : listeProgrammesFidelite){
+                //TODO EmptyListException
                 if (programme.getID() == choixClient){
                     client.souscrireFidele(programme);
                 }
@@ -175,11 +180,14 @@ public class Magasin {
         }
         scanner.close();
     }
+
+    //Renouveler un programme de fidélité
     public void renouvelerProgramme(Client client){
         Scanner scanner = new Scanner(System.in);
         Scanner scanner1 = new Scanner(System.in);
         System.out.println("Voulez vous renouveler cet abonnement au programme fidélité ?");
         String choixClient = scanner.nextLine();
+        //TODO BadUserInputException
         if (choixClient.equals("N")){
             System.out.println("La souscription au programme fidélité est terminée.");
         }
@@ -192,8 +200,10 @@ public class Magasin {
         scanner1.close();
     }
 
+    //Ajouter une voiture aux locations
     public void ajouterLocation(Vehicule vehicule){
         for (Vehicule vehicule2 : listeVehicules){
+            //TODO EmptyListException
             if (vehicule.getID() == vehicule2.getID()){
                 listeLocations.add(vehicule);
                 vehicule.louer();
@@ -202,6 +212,7 @@ public class Magasin {
         }
     }
 
+    //Créer un devis
     public void creerDevis(){
         Scanner scanner = new Scanner(System.in);
         Devis devis = new Devis();

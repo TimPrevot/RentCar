@@ -4,6 +4,8 @@ import java.util.Date;
 import java.time.LocalDate;
 
 public class Client {
+
+    //Variables de classe
     private int ID;
     private static int count;
     private String nom;
@@ -18,6 +20,7 @@ public class Client {
     private LocalDate dateFinFidele;
     private ProgrammeFidelite programmeSuivi;
 
+    //Constructeur
     public Client(String nom, String prenom, String email, String rue, String ville, String codePostal, String telephone) {
         this.ID = count++;
         this.nom = nom;
@@ -30,10 +33,12 @@ public class Client {
         this.clientFidele = false;
     }
 
+    //Constructeur par défaut
     public Client() {
         this.ID = count++;
     }
 
+    //Getters et setters
     public int getID() {
         return ID;
     }
@@ -122,6 +127,7 @@ public class Client {
         return programmeSuivi;
     }
 
+    //Redéfinition de toString()
     @Override
     public String toString() {
         return "Client{" +
@@ -133,6 +139,8 @@ public class Client {
                 '}';
     }
 
+    //Ajouter un programme de fidélité
+    //TODO ProgrammeNotFoundException
     public void souscrireFidele(ProgrammeFidelite nouveauProgramme){
         this.programmeSuivi = nouveauProgramme;
         this.clientFidele = true;
@@ -140,6 +148,8 @@ public class Client {
         this.dateFinFidele = java.time.LocalDate.now().plusYears(1);
     }
 
+    //Renouveler le programme de fidélité actuel
+    //TODO NoFideleException
     public void prolongerFidele(int duree){
         this.dateFinFidele.plusYears(duree);
     }

@@ -1,6 +1,8 @@
 package projet;
 
 public class Agence {
+
+    //Variables de classe
     private int ID;
     private static int count;
     private String nom;
@@ -10,6 +12,7 @@ public class Agence {
     private String codePostal;
     private String coordonneesGPS;
 
+    //Constructeur
     public Agence(String nom, String telephone, String rue, String ville, String codePostal, String coordonneesGPS) {
         this.ID = count++;
         this.nom = nom;
@@ -20,10 +23,12 @@ public class Agence {
         this.coordonneesGPS = coordonneesGPS;
     }
 
+    //Constructeur par défaut
     public Agence() {
         this.ID = count++;
     }
 
+    //Getters et setters
     public String getNom() {
         return nom;
     }
