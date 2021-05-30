@@ -1,6 +1,7 @@
 package projet;
 
 import connect_db.EditValue;
+import connect_db.InsertValue;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +17,7 @@ public class Magasin {
     private List<ProgrammeFidelite> listeProgrammesFidelite;
     private List<Vehicule> listeLocations;
     private List<Categorie> listeCategorie;
+    private List<Carburant> listeCarburants;
     private Client connectedClient;
 
     // Constructeur par défaut
@@ -210,6 +212,7 @@ public class Magasin {
 
     //Créer un devis
     public void creerDevis() {
+        InsertValue adder = new InsertValue();
         Scanner scanner = new Scanner(System.in);
         Devis devis = new Devis();
         afficherClients();
@@ -217,7 +220,7 @@ public class Magasin {
         int choixClient = scanner.nextInt();
         for (Client client : listeClients) {
             if (client.getID() == choixClient) {
-                devis.setClient(client);
+                devis.setClient(client.clone());
             }
         }
         afficherVehicules();
@@ -236,9 +239,9 @@ public class Magasin {
         if (choixAssurance.equals('O')) {
             devis.setAssurance(true);
         }
-        System.out.println("Veuillez indiquer la date de début de location, au format jour/mois/année :");
+        System.out.println("Veuillez indiquer la date de début de location, au format année/mois/jour :");
         String dateDebut = scanner.nextLine();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate localDateDebut = LocalDate.parse(dateDebut, formatter);
         devis.setDateDebut(localDateDebut);
         System.out.println("Veuillez indiquer la durée de la location, en jours :");
@@ -246,6 +249,9 @@ public class Magasin {
         devis.setDureeJours(duree);
         LocalDate dateFin = localDateDebut.plusDays(duree);
         devis.setDateFin(dateFin);
+        adder.insertValue("Devis", "client, vehiculeLoue, dateDebut, dateFin, dureeJours," +
+                " montantReduction, assurance, prixFinal", "" + devis.getClient().getID() + ", " +
+                devis.getVehiculeLoue().getID() + ", " + dateDebut + ", " + dateFin + ", " + duree);
     }
 
     //Changer les infos personnelles du client
@@ -259,8 +265,8 @@ public class Magasin {
         afficherClients();
         System.out.println("Indiquez l'ID du client à modifier :");
         choixEdit = scanner.nextInt();
-        for (Client client : listeClients){
-            if (client.getID() == choixEdit){
+        for (Client client : listeClients) {
+            if (client.getID() == choixEdit) {
                 clientAEditer = client.clone();
             }
         }
@@ -379,7 +385,7 @@ public class Magasin {
             }
             System.out.println("Voulez-vous modifier une autre info ? O pour Oui, N pour Non");
             choixEdit2 = scanner.nextLine();
-            if(choixEdit2.equals("N") || choixEdit2.equals("n")){
+            if (choixEdit2.equals("N") || choixEdit2.equals("n")) {
                 edit = false;
             }
         }

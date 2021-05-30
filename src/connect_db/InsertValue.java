@@ -5,6 +5,11 @@ import java.sql.Statement;
 
 public class InsertValue {
 
+    public void main(String[] args){
+        InsertValue adder = new InsertValue();
+        adder.insertValue("maTable", "colonne", "valeurs");
+    }
+
     public void insertValue (String table, String columns, String values) {
         Connection connection = null;
         Statement statement = null;

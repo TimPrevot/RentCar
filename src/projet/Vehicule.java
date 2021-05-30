@@ -1,6 +1,6 @@
 package projet;
 
-public class Vehicule {
+public class Vehicule implements Cloneable{
     private int ID;
     private static int count;
     private String marque;
@@ -12,11 +12,11 @@ public class Vehicule {
     private boolean aDeplacer;
     private Agence agenceActuelle;
     private Client clientActuel;
-    private String carburant;
+    private Carburant carburant;
     private Categorie categorie;
     private Agence nouvelleAgence;
 
-    public Vehicule(String marque, String modele, int kilometrage, boolean boiteAuto, boolean climatisation, String carburant, Categorie categorie) {
+    public Vehicule(String marque, String modele, int kilometrage, boolean boiteAuto, boolean climatisation, Carburant carburant, Categorie categorie) {
         this.ID = count ++;
         this.marque = marque;
         this.modele = modele;
@@ -105,11 +105,11 @@ public class Vehicule {
         this.clientActuel = clientActuel;
     }
 
-    public String getCarburant() {
+    public Carburant getCarburant() {
         return carburant;
     }
 
-    public void setCarburant(String carburant) {
+    public void setCarburant(Carburant carburant) {
         this.carburant = carburant;
     }
 
@@ -129,6 +129,10 @@ public class Vehicule {
         this.nouvelleAgence = nouvelleAgence;
     }
 
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
     @Override
     public String toString() {
         return "Vehicule{" +
@@ -142,6 +146,31 @@ public class Vehicule {
                 ", aDeplacer=" + aDeplacer +
                 ", carburant='" + carburant + '\'' +
                 '}';
+    }
+
+    /**
+     *
+     * @return a clone of this instance.
+     *
+     * @see Cloneable
+     */
+    @Override
+    public Vehicule clone() {
+        Vehicule result = new Vehicule();
+        result.setID(this.ID);
+        result.setMarque(this.marque);
+        result.setModele(this.modele);
+        result.setKilometrage(this.kilometrage);
+        result.setBoiteAuto(this.boiteAuto);
+        result.setClimatisation(this.climatisation);
+        result.setEstLoue(this.estLoue);
+        result.setaDeplacer(this.aDeplacer);
+        result.setAgenceActuelle(this.agenceActuelle.clone());
+        result.setClientActuel(this.clientActuel.clone());
+        result.setCarburant(this.carburant.clone());
+        result.setCategorie(this.categorie.clone());
+        result.setNouvelleAgence(this.nouvelleAgence.clone());
+        return result;
     }
 
     public void louer(){

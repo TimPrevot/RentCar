@@ -1,6 +1,6 @@
 package projet;
 
-public class Agence {
+public class Agence implements Cloneable{
 
     //Variables de classe
     private int ID;
@@ -29,6 +29,15 @@ public class Agence {
     }
 
     //Getters et setters
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
     public String getNom() {
         return nom;
     }
@@ -75,5 +84,23 @@ public class Agence {
 
     public void setCoordonneesGPS(String coordonneesGPS) {
         this.coordonneesGPS = coordonneesGPS;
+    }
+
+    /**
+     * @return a clone of this instance.
+     *
+     * @see Cloneable
+     */
+    @Override
+    public Agence clone() {
+        Agence result = new Agence();
+        result.setID(this.ID);
+        result.setNom(this.nom);
+        result.setRue(this.rue);
+        result.setVille(this.ville);
+        result.setCodePostal(this.codePostal);
+        result.setTelephone(this.telephone);
+        result.setCoordonneesGPS(this.coordonneesGPS);
+        return result;
     }
 }
