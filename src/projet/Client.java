@@ -3,10 +3,11 @@ package projet;
 import java.util.Date;
 import java.time.LocalDate;
 
-public class Client {
+public class Client implements Cloneable{
 
     //Variables de classe
     private int ID;
+    private boolean isConnected;
     private static int count;
     private String nom;
     private String prenom;
@@ -127,6 +128,12 @@ public class Client {
         return programmeSuivi;
     }
 
+    public void setProgrammeSuivi(ProgrammeFidelite programme) { this.programmeSuivi = programme; }
+
+    public void setStatus(boolean status){ this.isConnected = status; }
+
+    public boolean getStatus() { return isConnected; }
+
     //Redéfinition de toString()
     @Override
     public String toString() {
@@ -137,6 +144,28 @@ public class Client {
                 ", email='" + email + '\'' +
                 ", telephone='" + telephone + '\'' +
                 '}';
+    }
+
+    /**
+     * @return a clone of this instance.
+     *
+     * @see Cloneable
+     */
+    @Override
+    public Client clone() {
+        Client result = new Client();
+        result.setNom(this.nom);
+        result.setPrenom(this.prenom);
+        result.setEmail(this.email);
+        result.setRue(this.rue);
+        result.setVille(this.ville);
+        result.setCodePostal(this.codePostal);
+        result.setTelephone(this.telephone);
+        result.setClientFidele(this.clientFidele);
+        result.setDateDebutFidele(this.dateDebutFidele);
+        result.setDateFinFidele(this.dateFinFidele);
+        result.setProgrammeSuivi(this.programmeSuivi);
+        return result;
     }
 
     //Ajouter un programme de fidélité
