@@ -392,4 +392,60 @@ public class Magasin {
         scanner.close();
         System.out.println("Fin de l'édition");
     }
+    public void addClient(){
+        InsertValue adder = new InsertValue();
+        int choixEdit;
+        String choixEdit2;
+        Client clientAAjouter = new Client();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Entrez le nom: ");
+        choixEdit2 = scanner.nextLine();
+        clientAAjouter.setNom(choixEdit2);
+        System.out.println("Entrez le prénom: ");
+        choixEdit2 = scanner.nextLine();
+        clientAAjouter.setPrenom(choixEdit2);
+        System.out.println("Entrez l'email: ");
+        choixEdit2 = scanner.nextLine();
+        clientAAjouter.setEmail(choixEdit2);
+        System.out.println("Entrez la rue: ");
+        choixEdit2 = scanner.nextLine();
+        clientAAjouter.setRue(choixEdit2);
+        System.out.println("Entrez la ville: ");
+        choixEdit2 = scanner.nextLine();
+        clientAAjouter.setVille(choixEdit2);
+        System.out.println("Entrez le code Postal: ");
+        choixEdit2 = scanner.nextLine();
+        clientAAjouter.setCodePostal(choixEdit2);
+        System.out.println("Entrez le numéro de téléphone: ");
+        choixEdit2 = scanner.nextLine();
+        clientAAjouter.setTelephone(choixEdit2);
+        System.out.println("Entrez 1 si le client a souscris à un programme de fidélité, 0 sinon: ");
+        choixEdit = scanner.nextInt();
+        while (choixEdit != 1 || choixEdit != 0){
+            System.out.println("Veuillez entrer une valeur valide");
+            choixEdit = scanner.nextInt();
+        }
+        String query = "";
+        if (choixEdit == 1){
+            clientAAjouter.setClientFidele(true);
+            listeClients.add(clientAAjouter);
+            query = "INSERT INTO bdd1.Clients (nom, prenom, email, rue, ville, codePostal, telephone, clientFidele," +
+                    " dateDebutFidele, dateFinFidele, programmeSuivi) VALUES ("+clientAAjouter.getNom()+"," +
+                    " "+clientAAjouter.getPrenom()+", "+clientAAjouter.getEmail()+", "+clientAAjouter.getRue()+"," +
+                    " "+clientAAjouter.getVille()+", "+clientAAjouter.getCodePostal()+", "+clientAAjouter.getTelephone()
+                    +", true)";
+        } else if (choixEdit == 0) {
+            clientAAjouter.setClientFidele(false);
+            listeClients.add(clientAAjouter);
+            query = "INSERT INTO bdd1.Clients (nom, prenom, email, rue, ville, codePostal, telephone, clientFidele," +
+                    " dateDebutFidele, dateFinFidele, programmeSuivi) VALUES ("+clientAAjouter.getNom()+"," +
+                    " "+clientAAjouter.getPrenom()+", "+clientAAjouter.getEmail()+", "+clientAAjouter.getRue()+"," +
+                    " "+clientAAjouter.getVille()+", "+clientAAjouter.getCodePostal()+", "+clientAAjouter.getTelephone()
+                    +", false)";
+
+        }
+        System.out.println("Query : "+query);
+        adder.insertValueQuery(query);
+        scanner.close();
+    }
 }
