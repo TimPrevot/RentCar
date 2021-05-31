@@ -1,5 +1,6 @@
 package projet;
 
+import connect_db.DeleteValue;
 import connect_db.EditValue;
 import connect_db.InsertValue;
 
@@ -55,21 +56,21 @@ public class Magasin {
         System.out.println("Veuillez sélectionner la catégorie à afficher");
         String vehiculeCategorie;
         String choixCategorie = scanner.nextLine();
-        if (choixCategorie.equals("eco")) {
+        if (choixCategorie.equals("Eco")) {
             for (Vehicule vehicule : listeVehicules) {
                 if (vehicule.getCategorie().getNom().equals("eco")) {
                     vehiculeCategorie = vehicule.toString();
                     System.out.println(vehiculeCategorie);
                 }
             }
-        } else if (choixCategorie.equals("confort")) {
+        } else if (choixCategorie.equals("Confort")) {
             for (Vehicule vehicule : listeVehicules) {
                 if (vehicule.getCategorie().getNom().equals("confort")) {
                     vehiculeCategorie = vehicule.toString();
                     System.out.println(vehiculeCategorie);
                 }
             }
-        } else if (choixCategorie.equals("luxe")) {
+        } else if (choixCategorie.equals("Luxe")) {
             for (Vehicule vehicule : listeVehicules) {
                 if (vehicule.getCategorie().getNom().equals("luxe")) {
                     vehiculeCategorie = vehicule.toString();
@@ -392,6 +393,8 @@ public class Magasin {
         scanner.close();
         System.out.println("Fin de l'édition");
     }
+
+    //Ajouter un client dans la BDD
     public void addClient(){
         InsertValue adder = new InsertValue();
         int choixEdit;
@@ -447,5 +450,310 @@ public class Magasin {
         System.out.println("Query : "+query);
         adder.insertValueQuery(query);
         scanner.close();
+    }
+
+    //Supprimer un client de la BDD
+    public void deleteClient(){
+        DeleteValue eraser = new DeleteValue();
+        int choixEdit ;
+        Scanner scanner = new Scanner(System.in);
+        afficherClients();
+        System.out.println("Selectionnez l'ID du client à supprimer");
+        choixEdit = scanner.nextInt();
+        for(Client client :listeClients){
+            if(choixEdit == client.getID()){
+                listeClients.remove(client);
+                eraser.deleteValue("Clients", "client_ID" + client.getID());
+            }
+        }
+    }
+
+    //Ajouter un véhicule dans la BDD
+    public void addVehicule(){
+        InsertValue adder = new InsertValue();
+        int choixEdit;
+        String choixEdit2;
+        Vehicule vehiculeAAjouter = new Vehicule();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Entrez la marque: ");
+        choixEdit2 = scanner.nextLine();
+        vehiculeAAjouter.setMarque(choixEdit2);
+        System.out.println("Entrez le modèle: ");
+        choixEdit2 = scanner.nextLine();
+        vehiculeAAjouter.setModele(choixEdit2);
+        System.out.println("Entrez le kilometrage: ");
+        choixEdit = scanner.nextInt();
+        vehiculeAAjouter.setKilometrage(choixEdit);
+
+        System.out.println("Entrez 1 si Boite auto, 0 sinon: ");
+        choixEdit = scanner.nextInt();
+        while (choixEdit != 1 || choixEdit != 0){
+            System.out.println("Veuillez entrer une valeur valide");
+            choixEdit = scanner.nextInt();
+        }
+        if (choixEdit ==1){
+            vehiculeAAjouter.setBoiteAuto(true);
+        }
+        else if (choixEdit ==0){
+            vehiculeAAjouter.setBoiteAuto(false);
+        }
+
+        System.out.println("Entrez 1 si Climatisation, 0 sinon: ");
+        choixEdit = scanner.nextInt();
+        while (choixEdit != 1 || choixEdit != 0){
+            System.out.println("Veuillez entrer une valeur valide");
+            choixEdit = scanner.nextInt();
+        }
+        if (choixEdit ==1){
+            vehiculeAAjouter.setClimatisation(true);
+        }
+        else if (choixEdit ==0){
+            vehiculeAAjouter.setClimatisation(false);
+        }
+
+        System.out.println("Sélectionnez la catégorie du vehicule");
+        choixEdit2 = scanner.nextLine();
+        while (!choixEdit2.equals("Luxe") || !choixEdit2.equals("Confort") || !choixEdit2.equals("Eco")){
+            System.out.println("Veuillez entrer une valeur valide");
+            choixEdit2 = scanner.nextLine();
+        }
+        if (choixEdit2.equals("Luxe") ){
+            vehiculeAAjouter.setCategorie("choixEdit2");
+        }
+        else if (choixEdit2.equals("Confort")){
+            vehiculeAAjouter.setCategorie("choixEdit2");
+        }
+        else if (choixEdit2.equals("Eco")){
+            vehiculeAAjouter.setCategorie("choixEdit2");
+        }
+
+        System.out.println("Sélectionnez le carburant du vehicule");
+        choixEdit2 = scanner.nextLine();
+        while (!choixEdit2.equals("SP98") || !choixEdit2.equals("SP95") || !choixEdit2.equals("Diesel")){
+            System.out.println("Veuillez entrer une valeur valide");
+            choixEdit2 = scanner.nextLine();
+        }
+        if (choixEdit2.equals("SP98") ){
+            vehiculeAAjouter.setCarburant("choixEdit2");
+        }
+        else if (choixEdit2.equals("SP95")){
+            vehiculeAAjouter.setCarburant("choixEdit2");
+        }
+        else if (choixEdit2.equals("Diesel")){
+            vehiculeAAjouter.setCarburant("choixEdit2");
+        }
+
+
+        vehiculeAAjouter.setEstLoue(false);
+        vehiculeAAjouter.setaDeplacer(false);
+
+        String query = "";
+        listeVehicules.add(vehiculeAAjouter);
+        query = "INSERT INTO bdd1.Vehicules (marque, modele, kilometrage, boiteAuto, climatisation, estLoue, aDeplacer, carburant, categorie," +
+                " agenceActuelle, clientActuel, nouvelleAgence) VALUES ("+vehiculeAAjouter.getMarque()+"," +
+                " "+vehiculeAAjouter.getModele()+", "+vehiculeAAjouter.getKilometrage()+", "+vehiculeAAjouter.isBoiteAuto()+"," +
+                " "+vehiculeAAjouter.isClimatisation()+", "+vehiculeAAjouter.getCategorie()+", "+vehiculeAAjouter.getCarburant()
+                +", true)";
+
+        System.out.println("Query : "+query);
+        adder.insertValueQuery(query);
+        scanner.close();
+    }
+
+    //Editer les informations du véhicule
+    public void editVehicule(){
+        EditValue editor = new EditValue();
+        boolean edit = true;
+        int choixEdit;
+        String choixEdit2;
+        Vehicule vehiculeAEditer = new Vehicule();
+        Scanner scanner = new Scanner(System.in);
+        afficherVehicules();
+        System.out.println("Indiquez l'ID du vehicule à modifier :");
+        choixEdit = scanner.nextInt();
+        for (Vehicule vehicule : listeVehicules) {
+            if (vehicule.getID() == choixEdit) {
+                vehiculeAEditer = vehicule.clone();
+            }
+        }
+        while (edit) {
+            System.out.println("Veuillez choisir l'info à éditer :");
+            System.out.println("1 : Marque");
+            System.out.println("2 : Modele");
+            System.out.println("3 : Kilometrage");
+            System.out.println("4 : BoiteAuto");
+            System.out.println("5 : Climatisation");
+            System.out.println("6 : Categorie");
+            System.out.println("7 : Carburant");
+            choixEdit = scanner.nextInt();
+            switch (choixEdit) {
+                case 1:
+                    System.out.println("Veuillez entrer une marque :");
+                    choixEdit2 = scanner.nextLine();
+                    vehiculeAEditer.setMarque(choixEdit2);
+                    for (Vehicule vehicule : listeVehicules) {
+                        if (vehicule.getID() == vehiculeAEditer.getID()) {
+                           vehicule.setMarque(choixEdit2);
+                        }
+                    }
+                    editor.updateValues("Vehicules", "marque", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    break;
+                case 2:
+                    System.out.println("Veuillez entrer un modele :");
+                    choixEdit2 = scanner.nextLine();
+                    vehiculeAEditer.setModele(choixEdit2);
+                    for (Vehicule vehicule : listeVehicules) {
+                        if (vehicule.getID() == vehiculeAEditer.getID()) {
+                            vehicule.setModele(choixEdit2);
+                        }
+                    }
+                    editor.updateValues("Vehicules", "modele", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    break;
+                case 3:
+                    System.out.println("Veuillez entrer un kilometrage :");
+                    choixEdit = scanner.nextInt();
+                    vehiculeAEditer.setKilometrage(choixEdit);
+                    for (Vehicule vehicule : listeVehicules) {
+                        if (vehicule.getID() == vehiculeAEditer.getID()) {
+                            vehicule.setKilometrage(choixEdit);
+                        }
+                    }
+                    editor.updateValues("Vehicules", "kilometrage", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
+                    break;
+                case 4:
+                    System.out.println("Veuillez indiquer s'il y'a une boite auto : 0 si non, 1 si oui :");
+                    choixEdit = scanner.nextInt();
+                    if (choixEdit == 0) {
+                        vehiculeAEditer.setBoiteAuto(false);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setBoiteAuto(false);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "boiteAuto", "false", "vehicule_ID=" + vehiculeAEditer.getID());
+                    } else if (choixEdit == 1) {
+                        vehiculeAEditer.setBoiteAuto(true);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setBoiteAuto(true);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "boiteAuto", "true", "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    break;
+                default:
+                    break;
+                case 5:
+                    System.out.println("Veuillez indiquer s'il y'a une Climatisation : 0 si non, 1 si oui :");
+                    choixEdit = scanner.nextInt();
+                    if (choixEdit == 0) {
+                        vehiculeAEditer.setClimatisation(false);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setClimatisation(false);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "climatisation", "false", "vehicule_ID=" + vehiculeAEditer.getID());
+                    } else if (choixEdit == 1) {
+                        vehiculeAEditer.setClimatisation(true);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setClimatisation(true);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "climatisation", "true", "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    break;
+                default:
+                    break;
+                case 6:
+                    System.out.println("Veuillez entrer une catégorie :");
+                    choixEdit2 = scanner.nextLine();
+                    if (choixEdit2.equals("Luxe") ){
+                        vehiculeAEditer.setCategorie(choixEdit2);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(choixEdit2);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    else if (choixEdit2.equals("Confort")){
+                        vehiculeAEditer.setCategorie(choixEdit2);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(choixEdit2);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    else if (choixEdit2.equals("Eco")){
+                        vehiculeAEditer.setCategorie(choixEdit2);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(choixEdit2);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    break;
+                default:
+                    break;
+                case 7:
+                    System.out.println("Veuillez entrer le carburant :");
+                    choixEdit2 = scanner.nextLine();
+                    if (choixEdit2.equals("SP98") ){
+                        vehiculeAEditer.setCategorie(choixEdit2);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(choixEdit2);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    else if (choixEdit2.equals("SP95")){
+                        vehiculeAEditer.setCategorie(choixEdit2);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(choixEdit2);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    else if (choixEdit2.equals("Diesel")){
+                        vehiculeAEditer.setCategorie(choixEdit2);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(choixEdit2);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    break;
+                default:
+                    break;
+            }
+            System.out.println("Voulez-vous modifier une autre info ? O pour Oui, N pour Non");
+            choixEdit2 = scanner.nextLine();
+            if (choixEdit2.equals("N") || choixEdit2.equals("n")) {
+                edit = false;
+            }
+        }
+    }
+
+    //Supprimer un véhicule de la BDD
+    public void deleteVehicule(){
+        DeleteValue eraser = new DeleteValue();
+        int choixEdit ;
+        Scanner scanner = new Scanner(System.in);
+        afficherVehicules();
+        System.out.println("Selectionnez l'ID du vehicule à supprimer");
+        choixEdit = scanner.nextInt();
+        for(Vehicule vehicule :listeVehicules){
+            if(choixEdit == vehicule.getID()){
+                listeVehicules.remove(vehicule);
+                eraser.deleteValue("Vehicules", "vehicule_ID" + vehicule.getID());
+            }
+        }
     }
 }
