@@ -4,6 +4,7 @@ import connect_db.ConnectDB;
 import connect_db.DeleteValue;
 import connect_db.EditValue;
 import connect_db.InsertValue;
+import connect_db.ReadValue;
 import exceptions.BadInputException;
 
 import java.sql.Connection;
@@ -53,8 +54,26 @@ public class Magasin {
         }
     }
 
+    //Affichage de la liste des catégories de véhicules
+    public void afficherCategories(){
+        String categorieString;
+        for(Categorie categorie : listeCategorie){
+            categorieString = categorie.toString();
+            System.out.println(categorieString);
+        }
+    }
+
+    //Affichage de la liste des carburants
+    public void afficherCarburants(){
+        String carburantString;
+        for(Carburant carburant : listeCarburants){
+            carburantString = carburant.toString();
+            System.out.println(carburantString);
+        }
+    }
+
     //Affichage des véhicules par catégorie
-    public void afficherCategorie() {
+    public void afficherVehiculeCategorie() {
         Scanner scanner = new Scanner(System.in);
         String affichCategorie;
         for (Categorie categorie : listeCategorie) {
@@ -517,12 +536,36 @@ public class Magasin {
             vehiculeAAjouter.setClimatisation(false);
         }
 
+        System.out.println("Sélectionnez l'ID de la catégorie du vehicule");
+        afficherCategories();
+        choixEdit = scanner.nextInt();
+        while (choixEdit != 1|| choixEdit != 2 || choixEdit != 3){
         System.out.println("Sélectionnez la catégorie du vehicule");
         choixEdit2 = scanner.nextLine();
         while (!choixEdit2.equals("Luxe") || !choixEdit2.equals("Confort") || !choixEdit2.equals("Eco")) {
             System.out.println("Veuillez entrer une valeur valide");
-            choixEdit2 = scanner.nextLine();
+            choixEdit = scanner.nextInt();
         }
+        if (choixEdit == 1){
+            for(Categorie categorie : listeCategorie){
+                if(choixEdit == categorie.getID()){
+                    vehiculeAAjouter.setCategorie(categorie);
+                }
+            }
+        }
+        else if (choixEdit == 2){
+            for(Categorie categorie : listeCategorie){
+                if(choixEdit == categorie.getID()){
+                    vehiculeAAjouter.setCategorie(categorie);
+                }
+            }
+        }
+        else if (choixEdit == 3){
+            for(Categorie categorie : listeCategorie){
+                if(choixEdit == categorie.getID()){
+                    vehiculeAAjouter.setCategorie(categorie);
+                }
+            }
         if (choixEdit2.equals("Luxe")) {
             vehiculeAAjouter.setCategorie("choixEdit2");
         } else if (choixEdit2.equals("Confort")) {
@@ -531,12 +574,36 @@ public class Magasin {
             vehiculeAAjouter.setCategorie("choixEdit2");
         }
 
+        System.out.println("Sélectionnez l'ID du carburant du vehicule");
+        afficherCarburants();
+        choixEdit = scanner.nextInt();
+        while (choixEdit != 1|| choixEdit != 2 || choixEdit != 3){
         System.out.println("Sélectionnez le carburant du vehicule");
         choixEdit2 = scanner.nextLine();
         while (!choixEdit2.equals("SP98") || !choixEdit2.equals("SP95") || !choixEdit2.equals("Diesel")) {
             System.out.println("Veuillez entrer une valeur valide");
             choixEdit2 = scanner.nextLine();
         }
+        if (choixEdit == 1){
+            for(Carburant carburant : listeCarburants){
+                if(choixEdit == carburant.getID()){
+                    vehiculeAAjouter.setCarburant(carburant);
+                }
+            }
+        }
+        else if (choixEdit == 2){
+            for(Carburant carburant : listeCarburants){
+                if(choixEdit == carburant.getID()){
+                    vehiculeAAjouter.setCarburant(carburant);
+                }
+            }
+        }
+        else if (choixEdit == 3){
+            for(Carburant carburant : listeCarburants){
+                if(choixEdit == carburant.getID()){
+                    vehiculeAAjouter.setCarburant(carburant);
+                }
+            }
         if (choixEdit2.equals("SP98")) {
             vehiculeAAjouter.setCarburant("choixEdit2");
         } else if (choixEdit2.equals("SP95")) {
@@ -620,7 +687,7 @@ public class Magasin {
                             vehicule.setKilometrage(choixEdit);
                         }
                     }
-                    editor.updateValues("Vehicules", "kilometrage", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
+                    editor.updateValuesInt("Vehicules", "kilometrage", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
                     break;
                 case 4:
                     System.out.println("Veuillez indiquer s'il y'a une boite auto : 0 si non, 1 si oui :");
@@ -669,6 +736,15 @@ public class Magasin {
                 default:
                     break;
                 case 6:
+                    System.out.println("Veuillez entrer l'ID de la catégorie :");
+                    afficherCategories();
+                    choixEdit = scanner.nextInt();
+                    if (choixEdit == 1){
+                        for(Categorie categorie : listeCategorie){
+                            if(choixEdit == categorie.getID()){
+                                vehiculeAEditer.setCategorie(categorie);
+                            }
+                        }
                     afficherCategorie();
                     System.out.println("Veuillez entrer une catégorie :");
                     choixEdit2 = scanner.nextLine();
@@ -676,7 +752,15 @@ public class Magasin {
                         vehiculeAEditer.setCategorieInt(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
-                                vehicule.setCategorie(choixEdit2);
+                                vehicule.setCategorie(vehiculeAEditer.getCategorie());
+                            }
+                        }
+                        editor.updateValuesInt("Vehicules", "categorie", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    else if (choixEdit == 2){
+                        for(Categorie categorie : listeCategorie){
+                            if(choixEdit == categorie.getID()){
+                                vehiculeAEditer.setCategorie(categorie);
                             }
                         }
                         editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
@@ -684,7 +768,15 @@ public class Magasin {
                         vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
-                                vehicule.setCategorie(choixEdit2);
+                                vehicule.setCategorie(vehiculeAEditer.getCategorie());
+                            }
+                        }
+                        editor.updateValuesInt("Vehicules", "categorie", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    else if (choixEdit == 3){
+                        for(Categorie categorie : listeCategorie){
+                            if(choixEdit == categorie.getID()){
+                                vehiculeAEditer.setCategorie(categorie);
                             }
                         }
                         editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
@@ -692,22 +784,39 @@ public class Magasin {
                         vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
-                                vehicule.setCategorie(choixEdit2);
+                                vehicule.setCategorie(vehiculeAEditer.getCategorie());
                             }
                         }
-                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                        editor.updateValuesInt("Vehicules", "categorie", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
                     }
                     break;
                 default:
                     break;
                 case 7:
+                    System.out.println("Veuillez entrer l'ID du carburant :");
+                    afficherCarburants();
+                    choixEdit = scanner.nextInt();
+                    if (choixEdit == 1){
+                        for(Carburant carburant : listeCarburants){
+                            if(choixEdit == carburant.getID()){
+                                vehiculeAEditer.setCarburant(carburant);
+                            }
+                        }
                     System.out.println("Veuillez entrer le carburant :");
                     choixEdit2 = scanner.nextLine();
                     if (choixEdit2.equals("SP98")) {
                         vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
-                                vehicule.setCategorie(choixEdit2);
+                                vehicule.setCarburant(vehiculeAEditer.getCarburant());
+                            }
+                        }
+                        editor.updateValuesInt("Vehicules", "carburant", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    else if (choixEdit == 2){
+                        for(Carburant carburant : listeCarburants){
+                            if(choixEdit == carburant.getID()){
+                                vehiculeAEditer.setCarburant(carburant);
                             }
                         }
                         editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
@@ -715,7 +824,15 @@ public class Magasin {
                         vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
-                                vehicule.setCategorie(choixEdit2);
+                                vehicule.setCarburant(vehiculeAEditer.getCarburant());
+                            }
+                        }
+                        editor.updateValuesInt("Vehicules", "carburant", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    else if (choixEdit == 3){
+                        for(Carburant carburant : listeCarburants){
+                            if(choixEdit == carburant.getID()){
+                                vehiculeAEditer.setCarburant(carburant);
                             }
                         }
                         editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
@@ -723,10 +840,10 @@ public class Magasin {
                         vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
-                                vehicule.setCategorie(choixEdit2);
+                                vehicule.setCarburant(vehiculeAEditer.getCarburant());
                             }
                         }
-                        editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                        editor.updateValuesInt("Vehicules", "carburant", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
                     }
                     break;
                 default:

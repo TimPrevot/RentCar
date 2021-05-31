@@ -1,5 +1,6 @@
 package connect_db;
 
+import projet.Categorie;
 import projet.Vehicule;
 import projet.Magasin;
 
@@ -76,5 +77,31 @@ public class ReadValue {
             sqle.printStackTrace();
         }
         return listeVehicules;
+    }
+
+    public List<Categorie> readCategories(String query){
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
+
+        ConnectDB connectDB = new ConnectDB();
+        connection = connectDB.get_Connection();
+        Vector<Categorie> listeCategories = new Vector<>();
+
+        try {
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
+            while (rs.next()){
+                Categorie categorie = new Categorie();
+                categorie.setNom(rs.getString("nom"));
+                categorie.setPrixJour(rs.getInt("prixJour"));
+                categorie.setCaution(rs.getInt("caution"));
+                listeCategories.add(categorie);
+            }
+            return(Vector<Categorie>);
+        } catch (SQLException sqle){
+            sqle.printStackTrace();
+        }
     }
 }
