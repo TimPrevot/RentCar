@@ -3,6 +3,7 @@ package projet;
 import connect_db.DeleteValue;
 import connect_db.EditValue;
 import connect_db.InsertValue;
+import connect_db.ReadValue;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -45,8 +46,26 @@ public class Magasin {
         }
     }
 
+    //Affichage de la liste des catégories de véhicules
+    public void afficherCategories(){
+        String categorieString;
+        for(Categorie categorie : listeCategorie){
+            categorieString = categorie.toString();
+            System.out.println(categorieString);
+        }
+    }
+
+    //Affichage de la liste des carburants
+    public void afficherCarburants(){
+        String carburantString;
+        for(Carburant carburant : listeCarburants){
+            carburantString = carburant.toString();
+            System.out.println(carburantString);
+        }
+    }
+
     //Affichage des véhicules par catégorie
-    public void afficherCategorie() {
+    public void afficherVehiculeCategorie() {
         Scanner scanner = new Scanner(System.in);
         String affichCategorie;
         for (Categorie categorie : listeCategorie) {
@@ -511,36 +530,62 @@ public class Magasin {
             vehiculeAAjouter.setClimatisation(false);
         }
 
-        System.out.println("Sélectionnez la catégorie du vehicule");
-        choixEdit2 = scanner.nextLine();
-        while (!choixEdit2.equals("Luxe") || !choixEdit2.equals("Confort") || !choixEdit2.equals("Eco")){
+        System.out.println("Sélectionnez l'ID de la catégorie du vehicule");
+        afficherCategories();
+        choixEdit = scanner.nextInt();
+        while (choixEdit != 1|| choixEdit != 2 || choixEdit != 3){
             System.out.println("Veuillez entrer une valeur valide");
-            choixEdit2 = scanner.nextLine();
+            choixEdit = scanner.nextInt();
         }
-        if (choixEdit2.equals("Luxe") ){
-            vehiculeAAjouter.setCategorie("choixEdit2");
+        if (choixEdit == 1){
+            for(Categorie categorie : listeCategorie){
+                if(choixEdit == categorie.getID()){
+                    vehiculeAAjouter.setCategorie(categorie);
+                }
+            }
         }
-        else if (choixEdit2.equals("Confort")){
-            vehiculeAAjouter.setCategorie("choixEdit2");
+        else if (choixEdit == 2){
+            for(Categorie categorie : listeCategorie){
+                if(choixEdit == categorie.getID()){
+                    vehiculeAAjouter.setCategorie(categorie);
+                }
+            }
         }
-        else if (choixEdit2.equals("Eco")){
-            vehiculeAAjouter.setCategorie("choixEdit2");
+        else if (choixEdit == 3){
+            for(Categorie categorie : listeCategorie){
+                if(choixEdit == categorie.getID()){
+                    vehiculeAAjouter.setCategorie(categorie);
+                }
+            }
         }
 
-        System.out.println("Sélectionnez le carburant du vehicule");
-        choixEdit2 = scanner.nextLine();
-        while (!choixEdit2.equals("SP98") || !choixEdit2.equals("SP95") || !choixEdit2.equals("Diesel")){
+        System.out.println("Sélectionnez l'ID du carburant du vehicule");
+        afficherCarburants();
+        choixEdit = scanner.nextInt();
+        while (choixEdit != 1|| choixEdit != 2 || choixEdit != 3){
             System.out.println("Veuillez entrer une valeur valide");
             choixEdit2 = scanner.nextLine();
         }
-        if (choixEdit2.equals("SP98") ){
-            vehiculeAAjouter.setCarburant("choixEdit2");
+        if (choixEdit == 1){
+            for(Carburant carburant : listeCarburants){
+                if(choixEdit == carburant.getID()){
+                    vehiculeAAjouter.setCarburant(carburant);
+                }
+            }
         }
-        else if (choixEdit2.equals("SP95")){
-            vehiculeAAjouter.setCarburant("choixEdit2");
+        else if (choixEdit == 2){
+            for(Carburant carburant : listeCarburants){
+                if(choixEdit == carburant.getID()){
+                    vehiculeAAjouter.setCarburant(carburant);
+                }
+            }
         }
-        else if (choixEdit2.equals("Diesel")){
-            vehiculeAAjouter.setCarburant("choixEdit2");
+        else if (choixEdit == 3){
+            for(Carburant carburant : listeCarburants){
+                if(choixEdit == carburant.getID()){
+                    vehiculeAAjouter.setCarburant(carburant);
+                }
+            }
         }
 
 
@@ -618,7 +663,7 @@ public class Magasin {
                             vehicule.setKilometrage(choixEdit);
                         }
                     }
-                    editor.updateValues("Vehicules", "kilometrage", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
+                    editor.updateValuesInt("Vehicules", "kilometrage", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
                     break;
                 case 4:
                     System.out.println("Veuillez indiquer s'il y'a une boite auto : 0 si non, 1 si oui :");
