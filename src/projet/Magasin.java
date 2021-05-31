@@ -55,21 +55,21 @@ public class Magasin {
         System.out.println("Veuillez sélectionner la catégorie à afficher");
         String vehiculeCategorie;
         String choixCategorie = scanner.nextLine();
-        if (choixCategorie.equals("eco")) {
+        if (choixCategorie.equals("Eco")) {
             for (Vehicule vehicule : listeVehicules) {
                 if (vehicule.getCategorie().getNom().equals("eco")) {
                     vehiculeCategorie = vehicule.toString();
                     System.out.println(vehiculeCategorie);
                 }
             }
-        } else if (choixCategorie.equals("confort")) {
+        } else if (choixCategorie.equals("Confort")) {
             for (Vehicule vehicule : listeVehicules) {
                 if (vehicule.getCategorie().getNom().equals("confort")) {
                     vehiculeCategorie = vehicule.toString();
                     System.out.println(vehiculeCategorie);
                 }
             }
-        } else if (choixCategorie.equals("luxe")) {
+        } else if (choixCategorie.equals("Luxe")) {
             for (Vehicule vehicule : listeVehicules) {
                 if (vehicule.getCategorie().getNom().equals("luxe")) {
                     vehiculeCategorie = vehicule.toString();
@@ -444,6 +444,80 @@ public class Magasin {
                     +", false)";
 
         }
+        System.out.println("Query : "+query);
+        adder.insertValueQuery(query);
+        scanner.close();
+    }
+    public void addVehicule(){
+        InsertValue adder = new InsertValue();
+        int choixEdit;
+        String choixEdit2;
+        Vehicule vehiculeAAjouter = new Vehicule();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Entrez la marque: ");
+        choixEdit2 = scanner.nextLine();
+        vehiculeAAjouter.setMarque(choixEdit2);
+        System.out.println("Entrez le modèle: ");
+        choixEdit2 = scanner.nextLine();
+        vehiculeAAjouter.setModele(choixEdit2);
+        System.out.println("Entrez le kilometrage: ");
+        choixEdit = scanner.nextInt();
+        vehiculeAAjouter.setKilometrage(choixEdit);
+
+        System.out.println("Entrez 1 si Boite auto, 0 sinon: ");
+        choixEdit = scanner.nextInt();
+        while (choixEdit != 1 || choixEdit != 0){
+            System.out.println("Veuillez entrer une valeur valide");
+            choixEdit = scanner.nextInt();
+        }
+        if (choixEdit ==1){
+            vehiculeAAjouter.setBoiteAuto(true);
+        }
+        else if (choixEdit ==0){
+            vehiculeAAjouter.setBoiteAuto(false);
+        }
+
+        System.out.println("Entrez 1 si Climatisation, 0 sinon: ");
+        choixEdit = scanner.nextInt();
+        while (choixEdit != 1 || choixEdit != 0){
+            System.out.println("Veuillez entrer une valeur valide");
+            choixEdit = scanner.nextInt();
+        }
+        if (choixEdit ==1){
+            vehiculeAAjouter.setClimatisation(true);
+        }
+        else if (choixEdit ==0){
+            vehiculeAAjouter.setClimatisation(false);
+        }
+
+        System.out.println("Sélectionnez la catégorie du vehicule");
+        choixEdit2 = scanner.nextLine();
+        while (!choixEdit2.equals("Luxe") || !choixEdit2.equals("Confort") || !choixEdit2.equals("Eco")){
+            System.out.println("Veuillez entrer une valeur valide");
+            choixEdit2 = scanner.nextLine();
+        }
+        if (choixEdit2.equals("Luxe") ){
+            vehiculeAAjouter.getCategorie().setNom("choixEdit2");
+        }
+        else if (choixEdit2.equals("Confort")){
+            vehiculeAAjouter.getCategorie().setNom("choixEdit2");
+        }
+        else if (choixEdit2.equals("Eco")){
+            vehiculeAAjouter.getCategorie().setNom("choixEdit2");
+        }
+
+
+        vehiculeAAjouter.setEstLoue(false);
+        vehiculeAAjouter.setaDeplacer(false);
+
+        String query = "";
+        listeVehicules.add(vehiculeAAjouter);
+        query = "INSERT INTO bdd1.Vehicules (marque, modele, kilometrage, boiteAuto, climatisation, estLoue, aDeplacer, carburant, categorie," +
+                " agenceActuelle, clientActuel, nouvelleAgence) VALUES ("+vehiculeAAjouter.getMarque()+"," +
+                " "+vehiculeAAjouter.getModele()+", "+vehiculeAAjouter.getKilometrage()+", "+vehiculeAAjouter.isBoiteAuto()+"," +
+                " "+vehiculeAAjouter.isClimatisation()+", "+vehiculeAAjouter.getCategorie()+", "+vehiculeAAjouter.getCarburant()
+                +", true)";
+
         System.out.println("Query : "+query);
         adder.insertValueQuery(query);
         scanner.close();
