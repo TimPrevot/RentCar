@@ -1,25 +1,33 @@
 package projet;
 
+import connect_db.ConnectDB;
 import connect_db.DeleteValue;
 import connect_db.EditValue;
 import connect_db.InsertValue;
+import exceptions.BadInputException;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
+import java.util.Vector;
 
 public class Magasin {
-    private List<Client> listeClients;
-    private List<Employe> listeEmployes;
-    private List<Vehicule> listeVehicules;
-    private List<Agence> listeAgences;
-    private List<ProgrammeFidelite> listeProgrammesFidelite;
-    private List<Vehicule> listeLocations;
-    private List<Categorie> listeCategorie;
-    private List<Carburant> listeCarburants;
-    private Client connectedClient;
+    private Vector<Client> listeClients;
+    private Vector<Employe> listeEmployes;
+    private Vector<Vehicule> listeVehicules;
+    private Vector<Agence> listeAgences;
+    private Vector<ProgrammeFidelite> listeProgrammesFidelite;
+    private Vector<Vehicule> listeLocations;
+    private Vector<Categorie> listeCategorie;
+    private Vector<Carburant> listeCarburants;
+    private Vector<Devis> listeDevis;
+    private boolean userConnected;
 
     // Constructeur par défaut
     public Magasin() {
@@ -172,7 +180,6 @@ public class Magasin {
             System.out.println("Opération annulée");
         } else {
             for (ProgrammeFidelite programme : listeProgrammesFidelite) {
-                //TODO EmptyListException
                 if (programme.getID() == choixClient) {
                     client.souscrireFidele(programme);
                 }
@@ -370,7 +377,7 @@ public class Magasin {
                                 client.setClientFidele(false);
                             }
                         }
-                        editor.updateValues("Clients", "clientFidele", "false", "client_ID=" + clientAEditer.getID());
+                        editor.updateValues("Clients", "clientFidele", "'false'", "client_ID=" + clientAEditer.getID());
                     } else if (choixEdit == 1) {
                         clientAEditer.setClientFidele(true);
                         for (Client client : listeClients) {
@@ -378,7 +385,8 @@ public class Magasin {
                                 client.setClientFidele(true);
                             }
                         }
-                        editor.updateValues("Clients", "clientFidele", "true", "client_ID=" + clientAEditer.getID());
+                        editor.updateValues("Clients", "clientFidele", "'true'", "client_ID=" + clientAEditer.getID());
+
                     }
                     break;
                 default:
@@ -395,7 +403,7 @@ public class Magasin {
     }
 
     //Ajouter un client dans la BDD
-    public void addClient(){
+    public void addClient() {
         InsertValue adder = new InsertValue();
         int choixEdit;
         String choixEdit2;
@@ -424,44 +432,44 @@ public class Magasin {
         clientAAjouter.setTelephone(choixEdit2);
         System.out.println("Entrez 1 si le client a souscris à un programme de fidélité, 0 sinon: ");
         choixEdit = scanner.nextInt();
-        while (choixEdit != 1 || choixEdit != 0){
+        while (choixEdit != 1 || choixEdit != 0) {
             System.out.println("Veuillez entrer une valeur valide");
             choixEdit = scanner.nextInt();
         }
         String query = "";
-        if (choixEdit == 1){
+        if (choixEdit == 1) {
             clientAAjouter.setClientFidele(true);
             listeClients.add(clientAAjouter);
             query = "INSERT INTO bdd1.Clients (nom, prenom, email, rue, ville, codePostal, telephone, clientFidele," +
-                    " dateDebutFidele, dateFinFidele, programmeSuivi) VALUES ("+clientAAjouter.getNom()+"," +
-                    " "+clientAAjouter.getPrenom()+", "+clientAAjouter.getEmail()+", "+clientAAjouter.getRue()+"," +
-                    " "+clientAAjouter.getVille()+", "+clientAAjouter.getCodePostal()+", "+clientAAjouter.getTelephone()
-                    +", true)";
+                    " dateDebutFidele, dateFinFidele, programmeSuivi) VALUES (" + clientAAjouter.getNom() + "," +
+                    " " + clientAAjouter.getPrenom() + ", " + clientAAjouter.getEmail() + ", " + clientAAjouter.getRue() + "," +
+                    " " + clientAAjouter.getVille() + ", " + clientAAjouter.getCodePostal() + ", " + clientAAjouter.getTelephone()
+                    + ", true)";
         } else if (choixEdit == 0) {
             clientAAjouter.setClientFidele(false);
             listeClients.add(clientAAjouter);
             query = "INSERT INTO bdd1.Clients (nom, prenom, email, rue, ville, codePostal, telephone, clientFidele," +
-                    " dateDebutFidele, dateFinFidele, programmeSuivi) VALUES ("+clientAAjouter.getNom()+"," +
-                    " "+clientAAjouter.getPrenom()+", "+clientAAjouter.getEmail()+", "+clientAAjouter.getRue()+"," +
-                    " "+clientAAjouter.getVille()+", "+clientAAjouter.getCodePostal()+", "+clientAAjouter.getTelephone()
-                    +", false)";
+                    " dateDebutFidele, dateFinFidele, programmeSuivi) VALUES (" + clientAAjouter.getNom() + "," +
+                    " " + clientAAjouter.getPrenom() + ", " + clientAAjouter.getEmail() + ", " + clientAAjouter.getRue() + "," +
+                    " " + clientAAjouter.getVille() + ", " + clientAAjouter.getCodePostal() + ", " + clientAAjouter.getTelephone()
+                    + ", false)";
 
         }
-        System.out.println("Query : "+query);
+        System.out.println("Query : " + query);
         adder.insertValueQuery(query);
         scanner.close();
     }
 
     //Supprimer un client de la BDD
-    public void deleteClient(){
+    public void deleteClient() {
         DeleteValue eraser = new DeleteValue();
-        int choixEdit ;
+        int choixEdit;
         Scanner scanner = new Scanner(System.in);
         afficherClients();
         System.out.println("Selectionnez l'ID du client à supprimer");
         choixEdit = scanner.nextInt();
-        for(Client client :listeClients){
-            if(choixEdit == client.getID()){
+        for (Client client : listeClients) {
+            if (choixEdit == client.getID()) {
                 listeClients.remove(client);
                 eraser.deleteValue("Clients", "client_ID" + client.getID());
             }
@@ -469,7 +477,7 @@ public class Magasin {
     }
 
     //Ajouter un véhicule dans la BDD
-    public void addVehicule(){
+    public void addVehicule() {
         InsertValue adder = new InsertValue();
         int choixEdit;
         String choixEdit2;
@@ -487,59 +495,53 @@ public class Magasin {
 
         System.out.println("Entrez 1 si Boite auto, 0 sinon: ");
         choixEdit = scanner.nextInt();
-        while (choixEdit != 1 || choixEdit != 0){
+        while (choixEdit != 1 || choixEdit != 0) {
             System.out.println("Veuillez entrer une valeur valide");
             choixEdit = scanner.nextInt();
         }
-        if (choixEdit ==1){
+        if (choixEdit == 1) {
             vehiculeAAjouter.setBoiteAuto(true);
-        }
-        else if (choixEdit ==0){
+        } else if (choixEdit == 0) {
             vehiculeAAjouter.setBoiteAuto(false);
         }
 
         System.out.println("Entrez 1 si Climatisation, 0 sinon: ");
         choixEdit = scanner.nextInt();
-        while (choixEdit != 1 || choixEdit != 0){
+        while (choixEdit != 1 || choixEdit != 0) {
             System.out.println("Veuillez entrer une valeur valide");
             choixEdit = scanner.nextInt();
         }
-        if (choixEdit ==1){
+        if (choixEdit == 1) {
             vehiculeAAjouter.setClimatisation(true);
-        }
-        else if (choixEdit ==0){
+        } else if (choixEdit == 0) {
             vehiculeAAjouter.setClimatisation(false);
         }
 
         System.out.println("Sélectionnez la catégorie du vehicule");
         choixEdit2 = scanner.nextLine();
-        while (!choixEdit2.equals("Luxe") || !choixEdit2.equals("Confort") || !choixEdit2.equals("Eco")){
+        while (!choixEdit2.equals("Luxe") || !choixEdit2.equals("Confort") || !choixEdit2.equals("Eco")) {
             System.out.println("Veuillez entrer une valeur valide");
             choixEdit2 = scanner.nextLine();
         }
-        if (choixEdit2.equals("Luxe") ){
+        if (choixEdit2.equals("Luxe")) {
             vehiculeAAjouter.setCategorie("choixEdit2");
-        }
-        else if (choixEdit2.equals("Confort")){
+        } else if (choixEdit2.equals("Confort")) {
             vehiculeAAjouter.setCategorie("choixEdit2");
-        }
-        else if (choixEdit2.equals("Eco")){
+        } else if (choixEdit2.equals("Eco")) {
             vehiculeAAjouter.setCategorie("choixEdit2");
         }
 
         System.out.println("Sélectionnez le carburant du vehicule");
         choixEdit2 = scanner.nextLine();
-        while (!choixEdit2.equals("SP98") || !choixEdit2.equals("SP95") || !choixEdit2.equals("Diesel")){
+        while (!choixEdit2.equals("SP98") || !choixEdit2.equals("SP95") || !choixEdit2.equals("Diesel")) {
             System.out.println("Veuillez entrer une valeur valide");
             choixEdit2 = scanner.nextLine();
         }
-        if (choixEdit2.equals("SP98") ){
+        if (choixEdit2.equals("SP98")) {
             vehiculeAAjouter.setCarburant("choixEdit2");
-        }
-        else if (choixEdit2.equals("SP95")){
+        } else if (choixEdit2.equals("SP95")) {
             vehiculeAAjouter.setCarburant("choixEdit2");
-        }
-        else if (choixEdit2.equals("Diesel")){
+        } else if (choixEdit2.equals("Diesel")) {
             vehiculeAAjouter.setCarburant("choixEdit2");
         }
 
@@ -550,18 +552,18 @@ public class Magasin {
         String query = "";
         listeVehicules.add(vehiculeAAjouter);
         query = "INSERT INTO bdd1.Vehicules (marque, modele, kilometrage, boiteAuto, climatisation, estLoue, aDeplacer, carburant, categorie," +
-                " agenceActuelle, clientActuel, nouvelleAgence) VALUES ("+vehiculeAAjouter.getMarque()+"," +
-                " "+vehiculeAAjouter.getModele()+", "+vehiculeAAjouter.getKilometrage()+", "+vehiculeAAjouter.isBoiteAuto()+"," +
-                " "+vehiculeAAjouter.isClimatisation()+", "+vehiculeAAjouter.getCategorie()+", "+vehiculeAAjouter.getCarburant()
-                +", true)";
+                " agenceActuelle, clientActuel, nouvelleAgence) VALUES (" + vehiculeAAjouter.getMarque() + "," +
+                " " + vehiculeAAjouter.getModele() + ", " + vehiculeAAjouter.getKilometrage() + ", " + vehiculeAAjouter.isBoiteAuto() + "," +
+                " " + vehiculeAAjouter.isClimatisation() + ", " + vehiculeAAjouter.getCategorie() + ", " + vehiculeAAjouter.getCarburant()
+                + ", true)";
 
-        System.out.println("Query : "+query);
+        System.out.println("Query : " + query);
         adder.insertValueQuery(query);
         scanner.close();
     }
 
     //Editer les informations du véhicule
-    public void editVehicule(){
+    public void editVehicule() {
         EditValue editor = new EditValue();
         boolean edit = true;
         int choixEdit;
@@ -593,7 +595,7 @@ public class Magasin {
                     vehiculeAEditer.setMarque(choixEdit2);
                     for (Vehicule vehicule : listeVehicules) {
                         if (vehicule.getID() == vehiculeAEditer.getID()) {
-                           vehicule.setMarque(choixEdit2);
+                            vehicule.setMarque(choixEdit2);
                         }
                     }
                     editor.updateValues("Vehicules", "marque", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
@@ -667,9 +669,18 @@ public class Magasin {
                 default:
                     break;
                 case 6:
+                    afficherCategorie();
                     System.out.println("Veuillez entrer une catégorie :");
                     choixEdit2 = scanner.nextLine();
-                    if (choixEdit2.equals("Luxe") ){
+                    if (choixEdit2.equals("Luxe")) {
+                        vehiculeAEditer.setCategorieInt(choixEdit2);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(choixEdit2);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    } else if (choixEdit2.equals("Confort")) {
                         vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
@@ -677,17 +688,7 @@ public class Magasin {
                             }
                         }
                         editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
-                    }
-                    else if (choixEdit2.equals("Confort")){
-                        vehiculeAEditer.setCategorie(choixEdit2);
-                        for (Vehicule vehicule : listeVehicules) {
-                            if (vehicule.getID() == vehiculeAEditer.getID()) {
-                                vehicule.setCategorie(choixEdit2);
-                            }
-                        }
-                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
-                    }
-                    else if (choixEdit2.equals("Eco")){
+                    } else if (choixEdit2.equals("Eco")) {
                         vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
@@ -702,7 +703,7 @@ public class Magasin {
                 case 7:
                     System.out.println("Veuillez entrer le carburant :");
                     choixEdit2 = scanner.nextLine();
-                    if (choixEdit2.equals("SP98") ){
+                    if (choixEdit2.equals("SP98")) {
                         vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
@@ -710,8 +711,7 @@ public class Magasin {
                             }
                         }
                         editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
-                    }
-                    else if (choixEdit2.equals("SP95")){
+                    } else if (choixEdit2.equals("SP95")) {
                         vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
@@ -719,8 +719,7 @@ public class Magasin {
                             }
                         }
                         editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
-                    }
-                    else if (choixEdit2.equals("Diesel")){
+                    } else if (choixEdit2.equals("Diesel")) {
                         vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
@@ -742,18 +741,203 @@ public class Magasin {
     }
 
     //Supprimer un véhicule de la BDD
-    public void deleteVehicule(){
+    public void deleteVehicule() {
         DeleteValue eraser = new DeleteValue();
-        int choixEdit ;
+        int choixEdit;
         Scanner scanner = new Scanner(System.in);
         afficherVehicules();
         System.out.println("Selectionnez l'ID du vehicule à supprimer");
         choixEdit = scanner.nextInt();
-        for(Vehicule vehicule :listeVehicules){
-            if(choixEdit == vehicule.getID()){
+        for (Vehicule vehicule : listeVehicules) {
+            if (choixEdit == vehicule.getID()) {
                 listeVehicules.remove(vehicule);
                 eraser.deleteValue("Vehicules", "vehicule_ID" + vehicule.getID());
             }
         }
+    }
+
+    public void connectEmploye() {
+        Scanner scanner = new Scanner(System.in);
+        String login = "", mdp = "";
+        System.out.println("Veuillez rentrer votre login :");
+        login = scanner.nextLine();
+        System.out.println("Veuillez rentrer votre mot de passe :");
+        mdp = scanner.nextLine();
+        String query = "SELECT * FROM Employes WHERE login='" + login + "' AND password='" + mdp + "'";
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        ConnectDB obj_ConnectDB = new ConnectDB();
+        connection = obj_ConnectDB.get_Connection();
+
+        try {
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            if (rs != null) {
+                Employe employe = new Employe();
+                employe.setNom(rs.getString("nom"));
+                employe.setPrenom(rs.getString("prenom"));
+                employe.setEmail(rs.getString("email"));
+                employe.setRue(rs.getString("rue"));
+                employe.setVille(rs.getString("ville"));
+                employe.setCodePostal(rs.getString("codePostal"));
+                employe.setTelephone(rs.getString("telephone"));
+                employe.setLogin(rs.getString("login"));
+                employe.setPassword(rs.getString("password"));
+                employe.setEstChauffeur(rs.getBoolean("estChauffeur"));
+                userConnected = true;
+            } else {
+                throw new BadInputException("Ces identifiants ne figurent pas dans la base de données. Connexion échouée");
+            }
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } catch (BadInputException bie) {
+            bie.printStackTrace();
+        }
+    }
+
+    public void loadData() {
+        loadEmployes();
+        loadClients();
+        loadVehicules();
+        loadAgences();
+        loadProgrammes();
+        loadCategories();
+        loadCarburants();
+        loadDevis();
+    }
+
+    public void loadEmployes() {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
+
+        ConnectDB connectDB = new ConnectDB();
+        connection = connectDB.get_Connection();
+        Vector<Employe> listeEmployes = new Vector<>();
+
+        try {
+            while (rs.next()) {
+                Employe employe = new Employe();
+                employe.setNom(rs.getString("nom"));
+                employe.setPrenom(rs.getString("prenom"));
+                employe.setEmail(rs.getString("email"));
+                employe.setRue(rs.getString("rue"));
+                employe.setVille(rs.getString("ville"));
+                employe.setCodePostal(rs.getString("codePostal"));
+                employe.setTelephone(rs.getString("telephone"));
+                employe.setLogin(rs.getString("login"));
+                employe.setPassword(rs.getString("password"));
+                employe.setEstChauffeur(rs.getBoolean("estChauffeur"));
+                listeEmployes.add(employe);
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+        this.listeEmployes = (Vector) listeEmployes.clone();
+
+
+    }
+
+    public void loadClients(){
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
+
+        ConnectDB connectDB = new ConnectDB();
+        connection = connectDB.get_Connection();
+        Vector<Client> listeClients = new Vector<>();
+
+        try {
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
+            while (rs.next()){
+                Client client = new Client();
+                client.setNom(rs.getString("nom"));
+                client.setPrenom(rs.getString("prenom"));
+                client.setEmail(rs.getString("email"));
+                client.setRue(rs.getString("rue"));
+                client.setVille(rs.getString("ville"));
+                client.setCodePostal(rs.getString("codePostal"));
+                client.setTelephone(rs.getString("telephone"));
+                client.setClientFidele(rs.getBoolean("clientFidele");
+                client.setDateDebutFidele(this.);
+                listeClients.add(client);
+            }
+        } catch (SQLException sqle){
+            sqle.printStackTrace();
+        }
+        this.listeClients = (Vector) listeClients.clone();
+    }
+
+    // WIP
+    public void loadVehicules(){
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
+
+        ConnectDB connectDB = new ConnectDB();
+        connection = connectDB.get_Connection();
+        Vector<Vehicule> listeVehicules = new Vector<>();
+
+        try {
+            while (rs.next()) {
+                Vehicule vehicule = new Vehicule();
+                vehicule.setNom(rs.getString("nom"));
+                employe.setPrenom(rs.getString("prenom"));
+                employe.setEmail(rs.getString("email"));
+                employe.setRue(rs.getString("rue"));
+                employe.setVille(rs.getString("ville"));
+                employe.setCodePostal(rs.getString("codePostal"));
+                employe.setTelephone(rs.getString("telephone"));
+                employe.setLogin(rs.getString("login"));
+                employe.setPassword(rs.getString("password"));
+                employe.setEstChauffeur(rs.getBoolean("estChauffeur"));
+                listeEmployes.add(employe);
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+        this.listeVehicules = (Vector) listeVehicules.clone();
+    }
+
+    public void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int choixUser = 0, choixUser2 = 0;
+        System.out.println("Bienvenue");
+        System.out.println("Connectez-vous pour continuer :");
+        connectEmploye();
+        while (userConnected) {
+            laodData();
+            System.out.println("Que voulez-vous faire ?");
+            System.out.println("1 : Gestion des clients");
+            System.out.println("2 : Gestion des véhicules");
+            System.out.println("3 : Création d'un devis");
+            System.out.println("4 : Gestion des Employes");
+            choixUser = scanner.nextInt();
+            switch (choixUser) {
+                case 1:
+                    System.out.println("1 : Ajouter un nouveau client");
+                    System.out.println("2 : Modifier un client existant");
+                    System.out.println("3: Supprimer un client existant");
+                    choixUser2 = scanner.nextInt();
+                    switch (choixUser2) {
+                        case 1:
+                            addClient();
+                            break;
+                        case 2:
+                            editClient();
+                            break;
+                        case 3:
+                            deleteClient();
+                            break;
+                        case 4:
+
+                    }
+            }
+        }
+
     }
 }
