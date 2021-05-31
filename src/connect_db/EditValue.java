@@ -17,12 +17,30 @@ public class EditValue {
         connection = obj_ConnectDB.get_Connection();
 
         try {
-            String query = "update bdd1."+table+" set "+column+"='"+newValue+"' where "+condition;
+            String query = "update bdd1." + table + " set " + column + "='" + newValue + "' where " + condition;
             System.out.println(query);
             statement = connection.createStatement();
             statement.executeUpdate(query);
             System.out.println("Update executed successfully");
-        }catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateValuesInt(String table, String column, int newValue, String condition) {
+        Connection connection = null;
+        Statement statement = null;
+
+        ConnectDB obj_ConnectDB = new ConnectDB();
+        connection = obj_ConnectDB.get_Connection();
+
+        try {
+            String query = "update bdd1." + table + " set " + column + "='" + newValue + "' where " + condition;
+            System.out.println(query);
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+            System.out.println("Update executed successfully");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

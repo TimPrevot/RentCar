@@ -1,11 +1,17 @@
 package projet;
 
-public class Categorie implements Cloneable{
+public class Carburant implements Cloneable{
+
     private int ID;
     private static int count;
     private String nom;
-    private int prixJour;
-    private int caution;
+
+    public Carburant(String nom){
+        this.ID = count++;
+        this.nom = nom;
+    }
+
+    public Carburant(){ this.ID = count++; }
 
     public int getID() {
         return ID;
@@ -20,7 +26,7 @@ public class Categorie implements Cloneable{
     }
 
     public static void setCount(int count) {
-        Categorie.count = count;
+        Carburant.count = count;
     }
 
     public String getNom() {
@@ -31,34 +37,16 @@ public class Categorie implements Cloneable{
         this.nom = nom;
     }
 
-    public int getPrixJour() {
-        return prixJour;
-    }
-
-    public void setPrixJour(int prixJour) {
-        this.prixJour = prixJour;
-    }
-
-    public int getCaution() {
-        return caution;
-    }
-
-    public void setCaution(int caution) {
-        this.caution = caution;
-    }
-
     /**
      * @return a clone of this instance.
      *
      * @see Cloneable
      */
     @Override
-    public Categorie clone() {
-        Categorie result = new Categorie();
+    public Carburant clone() {
+        Carburant result = new Carburant();
         result.setID(this.ID);
         result.setNom(this.nom);
-        result.setPrixJour(this.prixJour);
-        result.setCaution(this.caution);
         return result;
     }
 }
