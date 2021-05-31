@@ -1,9 +1,15 @@
 package projet;
 
+import connect_db.ConnectDB;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
 import java.time.LocalDate;
 
-public class Client implements Cloneable{
+public class Client implements Cloneable {
 
     //Variables de classe
     private int ID;
@@ -42,6 +48,10 @@ public class Client implements Cloneable{
     //Getters et setters
     public int getID() {
         return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getNom() {
@@ -128,11 +138,43 @@ public class Client implements Cloneable{
         return programmeSuivi;
     }
 
-    public void setProgrammeSuivi(ProgrammeFidelite programme) { this.programmeSuivi = programme; }
+    public void setProgrammeSuivi(ProgrammeFidelite programme) {
+        this.programmeSuivi = programme;
+    }
 
-    public void setStatus(boolean status){ this.isConnected = status; }
+    //Setter qui reçoit un int et lit le bon programme depuis la BDD
 
-    public boolean getStatus() { return isConnected; }
+    public void setProgrammeSuiviInt(int programmeID) throws SQLException {
+        String query = "SELECT * FROM ProgrammesFidelite WHERE programme_ID='" + programmeID + "'";
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
+
+        ConnectDB connectDB = new ConnectDB();
+        connection = connectDB.get_Connection();
+
+        try {
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            ProgrammeFidelite programmeSuivi = new ProgrammeFidelite();
+            programmeSuivi.setID(rs.getInt("programme_ID"));
+            programmeSuivi.setDescription(rs.getString("description"));
+            programmeSuivi.setPrix(rs.getInt("prix"));
+            programmeSuivi.setReduction(rs.getInt("reduction"));
+            this.setProgrammeSuivi(programmeSuivi.clone());
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+    }
+
+    public void setStatus(boolean status) {
+        this.isConnected = status;
+    }
+
+    public boolean getStatus() {
+        return isConnected;
+    }
 
     //Redéfinition de toString()
     @Override
@@ -148,7 +190,6 @@ public class Client implements Cloneable{
 
     /**
      * @return a clone of this instance.
-     *
      * @see Cloneable
      */
     @Override
@@ -170,7 +211,7 @@ public class Client implements Cloneable{
 
     //Ajouter un programme de fidélité
     //TODO ProgrammeNotFoundException
-    public void souscrireFidele(ProgrammeFidelite nouveauProgramme){
+    public void souscrireFidele(ProgrammeFidelite nouveauProgramme) {
         this.programmeSuivi = nouveauProgramme;
         this.clientFidele = true;
         this.dateDebutFidele = java.time.LocalDate.now();
@@ -179,7 +220,7 @@ public class Client implements Cloneable{
 
     //Renouveler le programme de fidélité actuel
     //TODO NoFideleException
-    public void prolongerFidele(int duree){
+    public void prolongerFidele(int duree) {
         this.dateFinFidele.plusYears(duree);
     }
 }
