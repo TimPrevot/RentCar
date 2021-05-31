@@ -111,4 +111,33 @@ public class Employe {
     public void setEstChauffeur(boolean estChauffeur) {
         this.estChauffeur = estChauffeur;
     }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    /**
+     * @return a clone of this instance.
+     *
+     * @see Cloneable
+     */
+    @Override
+    public Employe clone() {
+        Employe result = new Employe();
+        result.setID(this.ID);
+        result.setNom(this.nom);
+        result.setPrenom(this.prenom);
+        result.setRue(this.rue);
+        result.setVille(this.ville);
+        result.setCodePostal(this.codePostal);
+        result.setTelephone(this.telephone);
+        result.setLogin(this.login);
+        result.setPassword(this.password);
+        result.setEstChauffeur(this.estChauffeur);
+        return result;
+    }
 }
