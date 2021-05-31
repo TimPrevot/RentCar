@@ -497,13 +497,13 @@ public class Magasin {
             choixEdit2 = scanner.nextLine();
         }
         if (choixEdit2.equals("Luxe") ){
-            vehiculeAAjouter.getCategorie().setNom("choixEdit2");
+            vehiculeAAjouter.setCategorie("choixEdit2");
         }
         else if (choixEdit2.equals("Confort")){
-            vehiculeAAjouter.getCategorie().setNom("choixEdit2");
+            vehiculeAAjouter.setCategorie("choixEdit2");
         }
         else if (choixEdit2.equals("Eco")){
-            vehiculeAAjouter.getCategorie().setNom("choixEdit2");
+            vehiculeAAjouter.setCategorie("choixEdit2");
         }
 
 
@@ -521,5 +521,163 @@ public class Magasin {
         System.out.println("Query : "+query);
         adder.insertValueQuery(query);
         scanner.close();
+    }
+
+    public void editVehicule(){
+        EditValue editor = new EditValue();
+        boolean edit = true;
+        int choixEdit;
+        String choixEdit2;
+        Vehicule vehiculeAEditer = new Vehicule();
+        Scanner scanner = new Scanner(System.in);
+        afficherVehicules();
+        System.out.println("Indiquez l'ID du vehicule à modifier :");
+        choixEdit = scanner.nextInt();
+        for (Vehicule vehicule : listeVehicules) {
+            if (vehicule.getID() == choixEdit) {
+                vehiculeAEditer = vehicule.clone();
+            }
+        }
+        while (edit) {
+            System.out.println("Veuillez choisir l'info à éditer :");
+            System.out.println("1 : Marque");
+            System.out.println("2 : Modele");
+            System.out.println("3 : Kilometrage");
+            System.out.println("4 : BoiteAuto");
+            System.out.println("5 : Climatisation");
+            System.out.println("6 : Categorie");
+            System.out.println("7 : Carburant");
+            choixEdit = scanner.nextInt();
+            switch (choixEdit) {
+                case 1:
+                    System.out.println("Veuillez entrer une marque :");
+                    choixEdit2 = scanner.nextLine();
+                    vehiculeAEditer.setMarque(choixEdit2);
+                    for (Vehicule vehicule : listeVehicules) {
+                        if (vehicule.getID() == vehiculeAEditer.getID()) {
+                           vehicule.setMarque(choixEdit2);
+                        }
+                    }
+                    editor.updateValues("Vehicules", "marque", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    break;
+                case 2:
+                    System.out.println("Veuillez entrer un modele :");
+                    choixEdit2 = scanner.nextLine();
+                    vehiculeAEditer.setModele(choixEdit2);
+                    for (Vehicule vehicule : listeVehicules) {
+                        if (vehicule.getID() == vehiculeAEditer.getID()) {
+                            vehicule.setModele(choixEdit2);
+                        }
+                    }
+                    editor.updateValues("Vehicules", "modele", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    break;
+                case 3:
+                    System.out.println("Veuillez entrer un kilometrage :");
+                    choixEdit = scanner.nextInt();
+                    vehiculeAEditer.setKilometrage(choixEdit);
+                    for (Vehicule vehicule : listeVehicules) {
+                        if (vehicule.getID() == vehiculeAEditer.getID()) {
+                            vehicule.setKilometrage(choixEdit);
+                        }
+                    }
+                    editor.updateValues("Vehicules", "kilometrage", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
+                    break;
+                case 4:
+                    System.out.println("Veuillez indiquer s'il y'a une boite auto : 0 si non, 1 si oui :");
+                    choixEdit = scanner.nextInt();
+                    if (choixEdit == 0) {
+                        vehiculeAEditer.setBoiteAuto(false);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setBoiteAuto(false);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "boiteAuto", "false", "vehicule_ID=" + vehiculeAEditer.getID());
+                    } else if (choixEdit == 1) {
+                        vehiculeAEditer.setBoiteAuto(true);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setBoiteAuto(true);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "boiteAuto", "true", "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    break;
+                default:
+                    break;
+                case 5:
+                    System.out.println("Veuillez indiquer s'il y'a une Climatisation : 0 si non, 1 si oui :");
+                    choixEdit = scanner.nextInt();
+                    if (choixEdit == 0) {
+                        vehiculeAEditer.setClimatisation(false);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setClimatisation(false);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "climatisation", "false", "vehicule_ID=" + vehiculeAEditer.getID());
+                    } else if (choixEdit == 1) {
+                        vehiculeAEditer.setClimatisation(true);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setClimatisation(true);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "climatisation", "true", "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    break;
+                default:
+                    break;
+                case 6:
+                    System.out.println("Veuillez entrer une catégorie :");
+                    choixEdit2 = scanner.nextLine();
+                    if (choixEdit2.equals("Luxe") ){
+                        vehiculeAEditer.setCategorie(choixEdit2);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(choixEdit2);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    else if (choixEdit2.equals("Confort")){
+                        vehiculeAEditer.setCategorie(choixEdit2);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(choixEdit2);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    else if (choixEdit2.equals("Eco")){
+                        vehiculeAEditer.setCategorie(choixEdit2);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(choixEdit2);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    break;
+                default:
+                    break;
+                case 7:
+                    System.out.println("Veuillez entrer un numéro de téléphone :");
+                    choixEdit2 = scanner.nextLine();
+                    clientAEditer.setTelephone(choixEdit2);
+                    for (Client client : listeClients) {
+                        if (client.getID() == clientAEditer.getID()) {
+                            client.setTelephone(choixEdit2);
+                        }
+                    }
+                    editor.updateValues("Clients", "telephone", choixEdit2, "client_ID=" + clientAEditer.getID());
+                    break;
+            }
+            System.out.println("Voulez-vous modifier une autre info ? O pour Oui, N pour Non");
+            choixEdit2 = scanner.nextLine();
+            if (choixEdit2.equals("N") || choixEdit2.equals("n")) {
+                edit = false;
+            }
+        }
     }
 }
