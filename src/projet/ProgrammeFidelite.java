@@ -15,10 +15,6 @@ public class ProgrammeFidelite {
         return this.ID;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -51,20 +47,5 @@ public class ProgrammeFidelite {
                 ", prix=" + prix +
                 ", reduction=" + reduction +
                 '}';
-    }
-
-    /**
-     * @return a clone of this instance.
-     *
-     * @see Cloneable
-     */
-    @Override
-    public ProgrammeFidelite clone() {
-        ProgrammeFidelite result = new ProgrammeFidelite();
-        result.setID(this.ID);
-        result.setDescription(this.description);
-        result.setPrix(this.prix);
-        result.setReduction(this.reduction);
-        return result;
     }
 }

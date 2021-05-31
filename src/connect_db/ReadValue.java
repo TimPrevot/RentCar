@@ -66,17 +66,15 @@ public class ReadValue {
                 vehicule.setClimatisation(rs.getBoolean("climatisation"));
                 vehicule.setEstLoue(rs.getBoolean("estLoue"));
                 vehicule.setaDeplacer(rs.getBoolean("aDeplacer"));
-                vehicule.setAgenceActuelleInt(rs.getInt("agenceActuelle"));
-                vehicule.setClientActuelInt(rs.getInt("clientActuel"));
-                vehicule.setCarburantInt(rs.getInt("carburantID"));
-                vehicule.setCategorieInt(rs.getInt("categorie"));
-                vehicule.setNouvelleAgenceInt(rs.getInt("nouvelleAgence"));
-                listeVehicules.add(vehicule);
+                vehicule.setAgenceActuelle(rs.getInt("agenceActuelle"));
+                vehicule.setClientActuel(rs.getInt("clientActuel"));
+                vehicule.setCarburant(rs.getInt("carburantID"));
+                vehicule.setCategorie(rs.getInt("categorie"));
+                vehicule.setNouvelleAgence(rs.getInt("nouvelleAgence"));
             }
         } catch (SQLException sqle){
             sqle.printStackTrace();
         }
-        return listeVehicules;
     }
 
     public List<Categorie> readCategories(String query){
