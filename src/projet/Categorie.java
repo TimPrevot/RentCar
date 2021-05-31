@@ -4,6 +4,7 @@ public class Categorie implements Cloneable{
     private int ID;
     private static int count;
     private String nom;
+    private int prixAssurance;
     private int prixJour;
     private int caution;
 

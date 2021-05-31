@@ -58,7 +58,7 @@ public class Magasin {
     //Affichage de la liste des catégories de véhicules
     public void afficherCategories(){
         String categorieString;
-        for(Categorie categorie : listeCategorie){
+        for(Categorie categorie : listeCategories){
             categorieString = categorie.toString();
             System.out.println(categorieString);
         }
@@ -77,7 +77,7 @@ public class Magasin {
     public void afficherVehiculeCategorie() {
         Scanner scanner = new Scanner(System.in);
         String affichCategorie;
-        for (Categorie categorie : listeCategorie) {
+        for (Categorie categorie : listeCategories) {
             affichCategorie = categorie.getNom();
             System.out.println(affichCategorie);
         }
@@ -480,6 +480,51 @@ public class Magasin {
         scanner.close();
     }
 
+    public void addEmploye() {
+        InsertValue adder = new InsertValue();
+        int choixEdit;
+        String choixEdit2;
+        Employe nouvelEmploye = new Employe();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Entrez le nom: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setNom(choixEdit2);
+        System.out.println("Entrez le prénom: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setPrenom(choixEdit2);
+        System.out.println("Entrez l'email: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setEmail(choixEdit2);
+        System.out.println("Entrez la rue: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setRue(choixEdit2);
+        System.out.println("Entrez la ville: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setVille(choixEdit2);
+        System.out.println("Entrez le code Postal: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setCodePostal(choixEdit2);
+        System.out.println("Entrez le numéro de téléphone: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setTelephone(choixEdit2);
+        System.out.println("Entrez le login qui sera utilisé pour vous connecter: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setLogin(choixEdit2);
+        System.out.println("Entrez le mot de passe associé à votre login: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setPassword(choixEdit2);
+        System.out.println("L'employé est-il chauffeur ? 1 pour Oui, 2 pour Non: ");
+        choixEdit = scanner.nextInt();
+        if (choixEdit == 1){
+            nouvelEmploye.setEstChauffeur(true);
+        } else {
+            nouvelEmploye.setEstChauffeur(false);
+        }
+        System.out.println("Entrez le numéro de téléphone: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setTelephone(choixEdit2);
+    }
+
     //Supprimer un client de la BDD
     public void deleteClient() {
         DeleteValue eraser = new DeleteValue();
@@ -870,14 +915,30 @@ public class Magasin {
     }
 
     public void loadData() {
+        System.out.println("Chargement des employés");
         loadEmployes();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des programmes");
         loadProgrammes();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des clients");
         loadClients();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des véhicules");
         loadVehicules();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des agences");
         loadAgences();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des catégories");
         loadCategories();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des carburants");
         loadCarburant();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des devis");
         loadDevis();
+        System.out.println("Chargement terminé");
     }
 
     public void loadEmployes() {
@@ -938,13 +999,19 @@ public class Magasin {
         this.listeDevis = (Vector) listeDevis.clone();
     }
 
-    public void main(String[] args) {
+    public static void main(String[] args) {
         Magasin magasin = new Magasin();
         Scanner scanner = new Scanner(System.in);
         int choixUser = 0, choixUser2 = 0;
         System.out.println("Bienvenue");
-        System.out.println("Connectez-vous pour continuer :");
-        magasin.connectEmploye();
+        magasin.loadData();
+        System.out.println("Connectez-vous pour continuer en appuyant sur 1, ou créez un nouvel employé en appuyant sur 2 :: ");
+        choixUser = scanner.nextInt();
+        if (choixUser == 1){
+            magasin.connectEmploye();
+        } else if (choixUser == 2){
+
+        }
         magasin.loadData();
         while (magasin.userConnected) {
             System.out.println("Que voulez-vous faire ?");
@@ -957,7 +1024,7 @@ public class Magasin {
                 case 1:
                     System.out.println("1 : Ajouter un nouveau client");
                     System.out.println("2 : Modifier un client existant");
-                    System.out.println("3: Supprimer un client existant");
+                    System.out.println("3 : Supprimer un client existant");
                     choixUser2 = scanner.nextInt();
                     switch (choixUser2) {
                         case 1:
@@ -972,8 +1039,42 @@ public class Magasin {
                         default:
                             break;
                     }
+                    break;
+                case 2:
+                    System.out.println("1 : Ajouter un nouveau véhicule");
+                    System.out.println("2 : Modifier un véhicule existant");
+                    System.out.println("3 : Supprimer un véhicule existant");
+                    choixUser2 = scanner.nextInt();
+                    switch (choixUser2) {
+                        case 1:
+                            magasin.addVehicule();
+                            break;
+                        case 2:
+                            magasin.editVehicule();
+                            break;
+                        case 3:
+                            magasin.deleteVehicule();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case 3:
+                    magasin.creerDevis();
+                    break;
+                case 4:
+                    //TODO
+                    break;
+                default:
+                    break;
+            }
+            System.out.println("Voulez-vous continuer ou vous déconnecter ?");
+            System.out.println("1 pour continuer, 2 pour arrêter");
+            choixUser = scanner.nextInt();
+            if (choixUser == 2){
+                magasin.userConnected = false;
             }
         }
-
+        System.out.println("Au revoir.");
     }
 }
