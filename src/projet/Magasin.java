@@ -712,67 +712,93 @@ public class Magasin {
                 default:
                     break;
                 case 6:
-                    System.out.println("Veuillez entrer une catégorie :");
-                    choixEdit2 = scanner.nextLine();
-                    if (choixEdit2.equals("Luxe") ){
-                        vehiculeAEditer.setCategorie(choixEdit2);
-                        for (Vehicule vehicule : listeVehicules) {
-                            if (vehicule.getID() == vehiculeAEditer.getID()) {
-                                vehicule.setCategorie(choixEdit2);
+                    System.out.println("Veuillez entrer l'ID de la catégorie :");
+                    afficherCategories();
+                    choixEdit = scanner.nextInt();
+                    if (choixEdit == 1){
+                        for(Categorie categorie : listeCategorie){
+                            if(choixEdit == categorie.getID()){
+                                vehiculeAEditer.setCategorie(categorie);
                             }
                         }
-                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(vehiculeAEditer.getCategorie());
+                            }
+                        }
+                        editor.updateValuesInt("Vehicules", "categorie", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
                     }
-                    else if (choixEdit2.equals("Confort")){
-                        vehiculeAEditer.setCategorie(choixEdit2);
-                        for (Vehicule vehicule : listeVehicules) {
-                            if (vehicule.getID() == vehiculeAEditer.getID()) {
-                                vehicule.setCategorie(choixEdit2);
+                    else if (choixEdit == 2){
+                        for(Categorie categorie : listeCategorie){
+                            if(choixEdit == categorie.getID()){
+                                vehiculeAEditer.setCategorie(categorie);
                             }
                         }
-                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(vehiculeAEditer.getCategorie());
+                            }
+                        }
+                        editor.updateValuesInt("Vehicules", "categorie", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
                     }
-                    else if (choixEdit2.equals("Eco")){
-                        vehiculeAEditer.setCategorie(choixEdit2);
-                        for (Vehicule vehicule : listeVehicules) {
-                            if (vehicule.getID() == vehiculeAEditer.getID()) {
-                                vehicule.setCategorie(choixEdit2);
+                    else if (choixEdit == 3){
+                        for(Categorie categorie : listeCategorie){
+                            if(choixEdit == categorie.getID()){
+                                vehiculeAEditer.setCategorie(categorie);
                             }
                         }
-                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(vehiculeAEditer.getCategorie());
+                            }
+                        }
+                        editor.updateValuesInt("Vehicules", "categorie", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
                     }
                     break;
                 default:
                     break;
                 case 7:
-                    System.out.println("Veuillez entrer le carburant :");
-                    choixEdit2 = scanner.nextLine();
-                    if (choixEdit2.equals("SP98") ){
-                        vehiculeAEditer.setCategorie(choixEdit2);
-                        for (Vehicule vehicule : listeVehicules) {
-                            if (vehicule.getID() == vehiculeAEditer.getID()) {
-                                vehicule.setCategorie(choixEdit2);
+                    System.out.println("Veuillez entrer l'ID du carburant :");
+                    afficherCarburants();
+                    choixEdit = scanner.nextInt();
+                    if (choixEdit == 1){
+                        for(Carburant carburant : listeCarburants){
+                            if(choixEdit == carburant.getID()){
+                                vehiculeAEditer.setCarburant(carburant);
                             }
                         }
-                        editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCarburant(vehiculeAEditer.getCarburant());
+                            }
+                        }
+                        editor.updateValuesInt("Vehicules", "carburant", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
                     }
-                    else if (choixEdit2.equals("SP95")){
-                        vehiculeAEditer.setCategorie(choixEdit2);
-                        for (Vehicule vehicule : listeVehicules) {
-                            if (vehicule.getID() == vehiculeAEditer.getID()) {
-                                vehicule.setCategorie(choixEdit2);
+                    else if (choixEdit == 2){
+                        for(Carburant carburant : listeCarburants){
+                            if(choixEdit == carburant.getID()){
+                                vehiculeAEditer.setCarburant(carburant);
                             }
                         }
-                        editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCarburant(vehiculeAEditer.getCarburant());
+                            }
+                        }
+                        editor.updateValuesInt("Vehicules", "carburant", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
                     }
-                    else if (choixEdit2.equals("Diesel")){
-                        vehiculeAEditer.setCategorie(choixEdit2);
-                        for (Vehicule vehicule : listeVehicules) {
-                            if (vehicule.getID() == vehiculeAEditer.getID()) {
-                                vehicule.setCategorie(choixEdit2);
+                    else if (choixEdit == 3){
+                        for(Carburant carburant : listeCarburants){
+                            if(choixEdit == carburant.getID()){
+                                vehiculeAEditer.setCarburant(carburant);
                             }
                         }
-                        editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCarburant(vehiculeAEditer.getCarburant());
+                            }
+                        }
+                        editor.updateValuesInt("Vehicules", "carburant", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
                     }
                     break;
                 default:
