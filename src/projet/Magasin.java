@@ -540,9 +540,6 @@ public class Magasin {
         afficherCategories();
         choixEdit = scanner.nextInt();
         while (choixEdit != 1|| choixEdit != 2 || choixEdit != 3){
-        System.out.println("Sélectionnez la catégorie du vehicule");
-        choixEdit2 = scanner.nextLine();
-        while (!choixEdit2.equals("Luxe") || !choixEdit2.equals("Confort") || !choixEdit2.equals("Eco")) {
             System.out.println("Veuillez entrer une valeur valide");
             choixEdit = scanner.nextInt();
         }
@@ -566,21 +563,12 @@ public class Magasin {
                     vehiculeAAjouter.setCategorie(categorie);
                 }
             }
-        if (choixEdit2.equals("Luxe")) {
-            vehiculeAAjouter.setCategorie("choixEdit2");
-        } else if (choixEdit2.equals("Confort")) {
-            vehiculeAAjouter.setCategorie("choixEdit2");
-        } else if (choixEdit2.equals("Eco")) {
-            vehiculeAAjouter.setCategorie("choixEdit2");
         }
 
         System.out.println("Sélectionnez l'ID du carburant du vehicule");
         afficherCarburants();
         choixEdit = scanner.nextInt();
         while (choixEdit != 1|| choixEdit != 2 || choixEdit != 3){
-        System.out.println("Sélectionnez le carburant du vehicule");
-        choixEdit2 = scanner.nextLine();
-        while (!choixEdit2.equals("SP98") || !choixEdit2.equals("SP95") || !choixEdit2.equals("Diesel")) {
             System.out.println("Veuillez entrer une valeur valide");
             choixEdit2 = scanner.nextLine();
         }
@@ -604,14 +592,7 @@ public class Magasin {
                     vehiculeAAjouter.setCarburant(carburant);
                 }
             }
-        if (choixEdit2.equals("SP98")) {
-            vehiculeAAjouter.setCarburant("choixEdit2");
-        } else if (choixEdit2.equals("SP95")) {
-            vehiculeAAjouter.setCarburant("choixEdit2");
-        } else if (choixEdit2.equals("Diesel")) {
-            vehiculeAAjouter.setCarburant("choixEdit2");
         }
-
 
         vehiculeAAjouter.setEstLoue(false);
         vehiculeAAjouter.setaDeplacer(false);
@@ -710,8 +691,6 @@ public class Magasin {
                         editor.updateValues("Vehicules", "boiteAuto", "true", "vehicule_ID=" + vehiculeAEditer.getID());
                     }
                     break;
-                default:
-                    break;
                 case 5:
                     System.out.println("Veuillez indiquer s'il y'a une Climatisation : 0 si non, 1 si oui :");
                     choixEdit = scanner.nextInt();
@@ -733,8 +712,6 @@ public class Magasin {
                         editor.updateValues("Vehicules", "climatisation", "true", "vehicule_ID=" + vehiculeAEditer.getID());
                     }
                     break;
-                default:
-                    break;
                 case 6:
                     System.out.println("Veuillez entrer l'ID de la catégorie :");
                     afficherCategories();
@@ -745,11 +722,6 @@ public class Magasin {
                                 vehiculeAEditer.setCategorie(categorie);
                             }
                         }
-                    afficherCategorie();
-                    System.out.println("Veuillez entrer une catégorie :");
-                    choixEdit2 = scanner.nextLine();
-                    if (choixEdit2.equals("Luxe")) {
-                        vehiculeAEditer.setCategorieInt(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
                                 vehicule.setCategorie(vehiculeAEditer.getCategorie());
@@ -763,9 +735,6 @@ public class Magasin {
                                 vehiculeAEditer.setCategorie(categorie);
                             }
                         }
-                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
-                    } else if (choixEdit2.equals("Confort")) {
-                        vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
                                 vehicule.setCategorie(vehiculeAEditer.getCategorie());
@@ -779,9 +748,6 @@ public class Magasin {
                                 vehiculeAEditer.setCategorie(categorie);
                             }
                         }
-                        editor.updateValues("Vehicules", "categorie", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
-                    } else if (choixEdit2.equals("Eco")) {
-                        vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
                                 vehicule.setCategorie(vehiculeAEditer.getCategorie());
@@ -789,8 +755,6 @@ public class Magasin {
                         }
                         editor.updateValuesInt("Vehicules", "categorie", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
                     }
-                    break;
-                default:
                     break;
                 case 7:
                     System.out.println("Veuillez entrer l'ID du carburant :");
@@ -802,10 +766,6 @@ public class Magasin {
                                 vehiculeAEditer.setCarburant(carburant);
                             }
                         }
-                    System.out.println("Veuillez entrer le carburant :");
-                    choixEdit2 = scanner.nextLine();
-                    if (choixEdit2.equals("SP98")) {
-                        vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
                                 vehicule.setCarburant(vehiculeAEditer.getCarburant());
@@ -819,9 +779,6 @@ public class Magasin {
                                 vehiculeAEditer.setCarburant(carburant);
                             }
                         }
-                        editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
-                    } else if (choixEdit2.equals("SP95")) {
-                        vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
                                 vehicule.setCarburant(vehiculeAEditer.getCarburant());
@@ -835,9 +792,6 @@ public class Magasin {
                                 vehiculeAEditer.setCarburant(carburant);
                             }
                         }
-                        editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
-                    } else if (choixEdit2.equals("Diesel")) {
-                        vehiculeAEditer.setCategorie(choixEdit2);
                         for (Vehicule vehicule : listeVehicules) {
                             if (vehicule.getID() == vehiculeAEditer.getID()) {
                                 vehicule.setCarburant(vehiculeAEditer.getCarburant());
