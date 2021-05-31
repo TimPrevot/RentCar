@@ -6,6 +6,14 @@ import connect_db.EditValue;
 import connect_db.InsertValue;
 import connect_db.ReadValue;
 import exceptions.BadInputException;
+import projet.ProgrammeFidelite;
+import projet.Employe;
+import projet.Vehicule;
+import projet.Carburant;
+import projet.Categorie;
+import projet.Client;
+import projet.Agence;
+import projet.Devis;
 
 import java.io.Reader;
 import java.sql.Connection;
@@ -14,10 +22,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
+
+import static projet.ScannerUtils.scanner;
 
 public class Magasin {
     private Vector<Client> listeClients;
@@ -30,6 +41,7 @@ public class Magasin {
     private Vector<Carburant> listeCarburants;
     private Vector<Devis> listeDevis;
     private boolean userConnected;
+    private Employe user;
 
     // Constructeur par défaut
     public Magasin() {
@@ -58,7 +70,7 @@ public class Magasin {
     //Affichage de la liste des catégories de véhicules
     public void afficherCategories(){
         String categorieString;
-        for(Categorie categorie : listeCategorie){
+        for(Categorie categorie : listeCategories){
             categorieString = categorie.toString();
             System.out.println(categorieString);
         }
@@ -75,9 +87,8 @@ public class Magasin {
 
     //Affichage des véhicules par catégorie
     public void afficherVehiculeCategorie() {
-        Scanner scanner = new Scanner(System.in);
         String affichCategorie;
-        for (Categorie categorie : listeCategorie) {
+        for (Categorie categorie : listeCategories) {
             affichCategorie = categorie.getNom();
             System.out.println(affichCategorie);
         }
@@ -107,12 +118,10 @@ public class Magasin {
             }
         }
 
-        scanner.close();
     }
 
     //Affichage par marque de véhicule
     public void afficherMarque() {
-        Scanner scanner = new Scanner(System.in);
         String affichMarque;
         for (Vehicule vehicule : listeVehicules) {
             affichMarque = vehicule.getMarque();
@@ -165,7 +174,6 @@ public class Magasin {
             }
         }
 
-        scanner.close();
     }
 
     //Afficher les véhicules en cours de location
@@ -191,7 +199,6 @@ public class Magasin {
 
     //Souscrire à un programme de fidélité
     public void souscrireProgrammeFidele(Client client) {
-        Scanner scanner = new Scanner(System.in);
         this.afficherProgrammes();
         System.out.println("Veuillez indiquer l'ID du programme auquel vous souhaitez souscrire, ou tapez 0 pour ne pas souscrire :");
         int choixClient = scanner.nextInt();
@@ -205,13 +212,10 @@ public class Magasin {
                 }
             }
         }
-        scanner.close();
     }
 
     //Renouveler un programme de fidélité
     public void renouvelerProgramme(Client client) {
-        Scanner scanner = new Scanner(System.in);
-        Scanner scanner1 = new Scanner(System.in);
         System.out.println("Voulez vous renouveler cet abonnement au programme fidélité ?");
         String choixClient = scanner.nextLine();
         //TODO BadUserInputException
@@ -219,11 +223,9 @@ public class Magasin {
             System.out.println("La souscription au programme fidélité est terminée.");
         } else if (choixClient.equals("Y")) {
             System.out.println("De combien d'années supplémentaires voulez vous souscrire ?");
-            int duree = scanner1.nextInt();
+            int duree = scanner.nextInt();
             client.prolongerFidele(duree);
         }
-        scanner.close();
-        scanner1.close();
     }
 
     //Ajouter une voiture aux locations
@@ -241,7 +243,6 @@ public class Magasin {
     //Créer un devis
     public void creerDevis() {
         InsertValue adder = new InsertValue();
-        Scanner scanner = new Scanner(System.in);
         Devis devis = new Devis();
         afficherClients();
         System.out.println("Veuillez indiquer l'ID du client concerné par le devis :");
@@ -277,7 +278,7 @@ public class Magasin {
         devis.setDureeJours(duree);
         LocalDate dateFin = localDateDebut.plusDays(duree);
         devis.setDateFin(dateFin);
-        adder.insertValue("Devis", "client, vehiculeLoue, dateDebut, dateFin, dureeJours," +
+        adder.insertValue("bdd1.Devis", "client, vehiculeLoue, dateDebut, dateFin, dureeJours," +
                 " montantReduction, assurance, prixFinal", "" + devis.getClient().getID() + ", " +
                 devis.getVehiculeLoue().getID() + ", " + dateDebut + ", " + dateFin + ", " + duree);
     }
@@ -289,7 +290,6 @@ public class Magasin {
         int choixEdit;
         String choixEdit2;
         Client clientAEditer = new Client();
-        Scanner scanner = new Scanner(System.in);
         afficherClients();
         System.out.println("Indiquez l'ID du client à modifier :");
         choixEdit = scanner.nextInt();
@@ -309,6 +309,7 @@ public class Magasin {
             System.out.println("7 : Téléphone");
             System.out.println("8 : Programme de fidélité");
             choixEdit = scanner.nextInt();
+            scanner.nextLine();
             switch (choixEdit) {
                 case 1:
                     System.out.println("Veuillez entrer un nom :");
@@ -319,7 +320,7 @@ public class Magasin {
                             client.setNom(choixEdit2);
                         }
                     }
-                    editor.updateValues("Clients", "nom", choixEdit2, "client_ID=" + clientAEditer.getID());
+                    editor.updateValues("clients", "nom", choixEdit2, "client_id=" + clientAEditer.getID());
                     break;
                 case 2:
                     System.out.println("Veuillez entrer un prénom :");
@@ -330,7 +331,7 @@ public class Magasin {
                             client.setPrenom(choixEdit2);
                         }
                     }
-                    editor.updateValues("Clients", "prenom", choixEdit2, "client_ID=" + clientAEditer.getID());
+                    editor.updateValues("clients", "prenom", choixEdit2, "client_id=" + clientAEditer.getID());
                     break;
                 case 3:
                     System.out.println("Veuillez entrer un email :");
@@ -341,7 +342,7 @@ public class Magasin {
                             client.setEmail(choixEdit2);
                         }
                     }
-                    editor.updateValues("Clients", "email", choixEdit2, "client_ID=" + clientAEditer.getID());
+                    editor.updateValues("clients", "email", choixEdit2, "client_id=" + clientAEditer.getID());
                     break;
                 case 4:
                     System.out.println("Veuillez entrer une rue :");
@@ -352,7 +353,7 @@ public class Magasin {
                             client.setRue(choixEdit2);
                         }
                     }
-                    editor.updateValues("Clients", "rue", choixEdit2, "client_ID=" + clientAEditer.getID());
+                    editor.updateValues("clients", "rue", choixEdit2, "client_id=" + clientAEditer.getID());
                     break;
                 case 5:
                     System.out.println("Veuillez entrer une ville :");
@@ -363,7 +364,7 @@ public class Magasin {
                             client.setVille(choixEdit2);
                         }
                     }
-                    editor.updateValues("Clients", "ville", choixEdit2, "client_ID=" + clientAEditer.getID());
+                    editor.updateValues("clients", "ville", choixEdit2, "client_id=" + clientAEditer.getID());
                     break;
                 case 6:
                     System.out.println("Veuillez entrer un code postal :");
@@ -374,7 +375,7 @@ public class Magasin {
                             client.setCodePostal(choixEdit2);
                         }
                     }
-                    editor.updateValues("Clients", "codePostal", choixEdit2, "client_ID=" + clientAEditer.getID());
+                    editor.updateValues("clients", "codepostal", choixEdit2, "client_id=" + clientAEditer.getID());
                     break;
                 case 7:
                     System.out.println("Veuillez entrer un numéro de téléphone :");
@@ -385,7 +386,7 @@ public class Magasin {
                             client.setTelephone(choixEdit2);
                         }
                     }
-                    editor.updateValues("Clients", "telephone", choixEdit2, "client_ID=" + clientAEditer.getID());
+                    editor.updateValues("clients", "telephone", choixEdit2, "client_id=" + clientAEditer.getID());
                     break;
                 case 8:
                     System.out.println("Veuillez indiquer le statut du programme de fidélité : 0 si aucun programme n'est suivi, 1 si un programme est suivi :");
@@ -397,7 +398,7 @@ public class Magasin {
                                 client.setClientFidele(false);
                             }
                         }
-                        editor.updateValues("Clients", "clientFidele", "'false'", "client_ID=" + clientAEditer.getID());
+                        editor.updateValues("clients", "clientfidele", "'false'", "client_id=" + clientAEditer.getID());
                     } else if (choixEdit == 1) {
                         clientAEditer.setClientFidele(true);
                         for (Client client : listeClients) {
@@ -405,7 +406,7 @@ public class Magasin {
                                 client.setClientFidele(true);
                             }
                         }
-                        editor.updateValues("Clients", "clientFidele", "'true'", "client_ID=" + clientAEditer.getID());
+                        editor.updateValues("clients", "clientfidele", "'true'", "client_id=" + clientAEditer.getID());
 
                     }
                     break;
@@ -418,7 +419,6 @@ public class Magasin {
                 edit = false;
             }
         }
-        scanner.close();
         System.out.println("Fin de l'édition");
     }
 
@@ -428,7 +428,6 @@ public class Magasin {
         int choixEdit;
         String choixEdit2;
         Client clientAAjouter = new Client();
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Entrez le nom: ");
         choixEdit2 = scanner.nextLine();
         clientAAjouter.setNom(choixEdit2);
@@ -452,7 +451,7 @@ public class Magasin {
         clientAAjouter.setTelephone(choixEdit2);
         System.out.println("Entrez 1 si le client a souscris à un programme de fidélité, 0 sinon: ");
         choixEdit = scanner.nextInt();
-        while (choixEdit != 1 || choixEdit != 0) {
+        while (choixEdit != 1 && choixEdit != 0) {
             System.out.println("Veuillez entrer une valeur valide");
             choixEdit = scanner.nextInt();
         }
@@ -460,31 +459,73 @@ public class Magasin {
         if (choixEdit == 1) {
             clientAAjouter.setClientFidele(true);
             listeClients.add(clientAAjouter);
-            query = "INSERT INTO bdd1.Clients (nom, prenom, email, rue, ville, codePostal, telephone, clientFidele," +
-                    " dateDebutFidele, dateFinFidele, programmeSuivi) VALUES (" + clientAAjouter.getNom() + "," +
+            query = "INSERT INTO bdd1.clients (nom, prenom, email, rue, ville, codepostal, telephone, clientfidele," +
+                    " datedebutfidele, datefinfidele, programmesuivi) VALUES (" + clientAAjouter.getNom() + "," +
                     " " + clientAAjouter.getPrenom() + ", " + clientAAjouter.getEmail() + ", " + clientAAjouter.getRue() + "," +
                     " " + clientAAjouter.getVille() + ", " + clientAAjouter.getCodePostal() + ", " + clientAAjouter.getTelephone()
-                    + ", true)";
+                    + ", true, null, null, null";
         } else if (choixEdit == 0) {
             clientAAjouter.setClientFidele(false);
             listeClients.add(clientAAjouter);
-            query = "INSERT INTO bdd1.Clients (nom, prenom, email, rue, ville, codePostal, telephone, clientFidele," +
-                    " dateDebutFidele, dateFinFidele, programmeSuivi) VALUES (" + clientAAjouter.getNom() + "," +
+            query = "INSERT INTO bdd1.clients (nom, prenom, email, rue, ville, codepostal, telephone, clientfidele," +
+                    " datedebutfidele, datefinfidele, programmesuivi) VALUES (" + clientAAjouter.getNom() + "," +
                     " " + clientAAjouter.getPrenom() + ", " + clientAAjouter.getEmail() + ", " + clientAAjouter.getRue() + "," +
                     " " + clientAAjouter.getVille() + ", " + clientAAjouter.getCodePostal() + ", " + clientAAjouter.getTelephone()
-                    + ", false)";
+                    + ", false, null, null, null)";
 
         }
         System.out.println("Query : " + query);
         adder.insertValueQuery(query);
-        scanner.close();
+    }
+
+    public void addEmploye() {
+        InsertValue adder = new InsertValue();
+        int choixEdit;
+        String choixEdit2;
+        Employe nouvelEmploye = new Employe();
+        System.out.println("Entrez le nom: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setNom(choixEdit2);
+        System.out.println("Entrez le prénom: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setPrenom(choixEdit2);
+        System.out.println("Entrez l'email: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setEmail(choixEdit2);
+        System.out.println("Entrez la rue: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setRue(choixEdit2);
+        System.out.println("Entrez la ville: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setVille(choixEdit2);
+        System.out.println("Entrez le code Postal: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setCodePostal(choixEdit2);
+        System.out.println("Entrez le numéro de téléphone: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setTelephone(choixEdit2);
+        System.out.println("Entrez le login qui sera utilisé pour vous connecter: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setLogin(choixEdit2);
+        System.out.println("Entrez le mot de passe associé à votre login: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setPassword(choixEdit2);
+        System.out.println("L'employé est-il chauffeur ? 1 pour Oui, 2 pour Non: ");
+        choixEdit = scanner.nextInt();
+        if (choixEdit == 1){
+            nouvelEmploye.setEstChauffeur(true);
+        } else {
+            nouvelEmploye.setEstChauffeur(false);
+        }
+        System.out.println("Entrez le numéro de téléphone: ");
+        choixEdit2 = scanner.nextLine();
+        nouvelEmploye.setTelephone(choixEdit2);
     }
 
     //Supprimer un client de la BDD
     public void deleteClient() {
         DeleteValue eraser = new DeleteValue();
         int choixEdit;
-        Scanner scanner = new Scanner(System.in);
         afficherClients();
         System.out.println("Selectionnez l'ID du client à supprimer");
         choixEdit = scanner.nextInt();
@@ -502,7 +543,6 @@ public class Magasin {
         int choixEdit;
         String choixEdit2;
         Vehicule vehiculeAAjouter = new Vehicule();
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Entrez la marque: ");
         choixEdit2 = scanner.nextLine();
         vehiculeAAjouter.setMarque(choixEdit2);
@@ -608,7 +648,6 @@ public class Magasin {
 
         System.out.println("Query : " + query);
         adder.insertValueQuery(query);
-        scanner.close();
     }
 
     //Editer les informations du véhicule
@@ -618,7 +657,6 @@ public class Magasin {
         int choixEdit;
         String choixEdit2;
         Vehicule vehiculeAEditer = new Vehicule();
-        Scanner scanner = new Scanner(System.in);
         afficherVehicules();
         System.out.println("Indiquez l'ID du vehicule à modifier :");
         choixEdit = scanner.nextInt();
@@ -816,7 +854,6 @@ public class Magasin {
     public void deleteVehicule() {
         DeleteValue eraser = new DeleteValue();
         int choixEdit;
-        Scanner scanner = new Scanner(System.in);
         afficherVehicules();
         System.out.println("Selectionnez l'ID du vehicule à supprimer");
         choixEdit = scanner.nextInt();
@@ -829,13 +866,13 @@ public class Magasin {
     }
 
     public void connectEmploye() {
-        Scanner scanner = new Scanner(System.in);
         String login = "", mdp = "";
         System.out.println("Veuillez rentrer votre login :");
         login = scanner.nextLine();
         System.out.println("Veuillez rentrer votre mot de passe :");
         mdp = scanner.nextLine();
-        String query = "SELECT * FROM Employes WHERE login='" + login + "' AND password='" + mdp + "'";
+        String query = "SELECT * FROM bdd1.Employes WHERE login='" + login + "' AND password='" + mdp + "'";
+        System.out.println("Query : " + query);
         Connection connection = null;
         Statement statement = null;
         ResultSet rs = null;
@@ -845,7 +882,8 @@ public class Magasin {
         try {
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
-            if (rs != null) {
+            System.out.println("Query executed");
+            if (rs.next()) {
                 Employe employe = new Employe();
                 employe.setNom(rs.getString("nom"));
                 employe.setPrenom(rs.getString("prenom"));
@@ -858,10 +896,10 @@ public class Magasin {
                 employe.setPassword(rs.getString("password"));
                 employe.setEstChauffeur(rs.getBoolean("estChauffeur"));
                 userConnected = true;
+                user = employe.clone();
             } else {
                 throw new BadInputException("Ces identifiants ne figurent pas dans la base de données. Connexion échouée");
             }
-
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         } catch (BadInputException bie) {
@@ -869,21 +907,91 @@ public class Magasin {
         }
     }
 
+    public void rendreVehicule(){
+        int choixRetour;
+        System.out.println("Selectionnez l'ID du véhicule retourné");
+        choixRetour = scanner.nextInt();
+        for(Vehicule vehicule : listeVehicules){
+            if(choixRetour == vehicule.getID()){
+                if(vehicule.getPleins()==0){
+                    for(Devis devis : listeDevis){
+                        if(devis.getVehiculeLoue().equals(vehicule)){
+                            devis.setPrixFinal(devis.getPrixFinal() + 10);
+                        }
+                    }
+                }
+                else if (vehicule.getPleins() == 25){
+                    for(Devis devis : listeDevis){
+                        if(devis.getVehiculeLoue().equals(vehicule)){
+                            devis.setPrixFinal(devis.getPrixFinal() + 20);
+                        }
+                    }
+                }
+                else if(vehicule.getPleins() == 50){
+                    for(Devis devis : listeDevis){
+                        if(devis.getVehiculeLoue().equals(vehicule)){
+                            devis.setPrixFinal(devis.getPrixFinal() + 30);
+                        }
+                    }
+                }
+                else if(vehicule.getPleins() == 75){
+                    for(Devis devis : listeDevis){
+                        if(devis.getVehiculeLoue().equals(vehicule)){
+                            devis.setPrixFinal(devis.getPrixFinal() + 40);
+                        }
+                    }
+                }
+            }
+        }
+
+        for(Vehicule vehicule : listeVehicules){
+            if (choixRetour == vehicule.getID()){
+                for (Devis devis : listeDevis){
+                    if (devis.getVehiculeLoue().equals(vehicule)){
+                        if(vehicule.isEndommage() && !devis.isAssurance()){
+                            devis.setPrixFinal(devis.getPrixFinal() + 500);
+                        }
+                    }
+
+                }
+            }
+        }
+
+
+
+    }
+
     public void loadData() {
-        loadEmployes();
+        System.out.println("Chargement des programmes");
         loadProgrammes();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des clients");
         loadClients();
-        loadVehicules();
-        loadAgences();
-        loadCategories();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des carburants");
         loadCarburant();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des catégories");
+        loadCategories();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des agences");
+        loadAgences();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des employés");
+        loadEmployes();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des véhicules");
+        loadVehicules();
+        System.out.println("Chargement terminé");
+        System.out.println("Chargement des devis");
         loadDevis();
+        System.out.println("Chargement terminé");
     }
 
     public void loadEmployes() {
         Vector<Employe> listeEmployes;
         ReadValue reader = new ReadValue();
-        listeEmployes = reader.readEmployes("SELECT * FROM Employes");
+        listeEmployes = reader.readEmployes("SELECT * FROM bdd1.Employes");
         this.listeEmployes = (Vector) listeEmployes.clone();
 
     }
@@ -891,7 +999,7 @@ public class Magasin {
     public void loadClients(){
         Vector<Client> listeClients;
         ReadValue reader = new ReadValue();
-        listeClients = reader.readClient("SELECT * FROM Clients");
+        listeClients = reader.readClient("SELECT * FROM bdd1.Clients");
         this.listeClients = (Vector) listeClients.clone();
     }
 
@@ -899,53 +1007,59 @@ public class Magasin {
     public void loadVehicules(){
         Vector<Vehicule> listeVehicules;
         ReadValue reader = new ReadValue();
-        listeVehicules = reader.readVehicules("SELECT * FROM Vehicules");
+        listeVehicules = reader.readVehicules("SELECT * FROM bdd1.Vehicules");
         this.listeVehicules = (Vector) listeVehicules.clone();
     }
 
     public void loadAgences(){
         Vector<Agence> listeAgences;
         ReadValue reader = new ReadValue();
-        listeAgences = reader.readAgences("SELECT * FROM Agences");
+        listeAgences = reader.readAgences("SELECT * FROM bdd1.Agences");
         this.listeAgences = (Vector) listeAgences.clone();
     }
 
     public void loadCarburant(){
         Vector<Carburant> listeCarburants;
         ReadValue reader = new ReadValue();
-        listeCarburants = reader.readCarburants("SELECT * FROM Carburants");
+        listeCarburants = reader.readCarburants("SELECT * FROM bdd1.Carburants");
         this.listeCarburants = (Vector) listeCarburants.clone();
     }
 
     public void loadProgrammes(){
         Vector<ProgrammeFidelite> listeProgrammes;
         ReadValue reader = new ReadValue();
-        listeProgrammes = reader.readProgrammes("SELECT * FROM ProgrammesFidelite");
+        listeProgrammes = reader.readProgrammes("SELECT * FROM bdd1.ProgrammesFidelite");
         this.listeProgrammesFidelite = (Vector) listeProgrammes.clone();
+        System.out.println(this.listeProgrammesFidelite);
     }
 
     public void loadCategories() {
         Vector<Categorie> listeCategories;
         ReadValue reader = new ReadValue();
-        listeCategories = reader.readCategories("SELECT * FROM Categories");
+        listeCategories = reader.readCategories("SELECT * FROM bdd1.Categories");
         this.listeCategories = (Vector) listeCategories.clone();
     }
 
     public void loadDevis() {
         Vector<Devis> listeDevis;
         ReadValue reader = new ReadValue();
-        listeDevis = reader.readDevis("SELECT * FROM Devis");
+        listeDevis = reader.readDevis("SELECT * FROM bdd1.Devis");
         this.listeDevis = (Vector) listeDevis.clone();
     }
 
-    public void main(String[] args) {
+    public static void main(String[] args) {
         Magasin magasin = new Magasin();
-        Scanner scanner = new Scanner(System.in);
-        int choixUser = 0, choixUser2 = 0;
+        int choixUser = 0, choixUser2 = 0, choixUser3 = 0;
         System.out.println("Bienvenue");
-        System.out.println("Connectez-vous pour continuer :");
-        magasin.connectEmploye();
         magasin.loadData();
+        System.out.println("Connectez-vous pour continuer en appuyant sur 1, ou créez un nouvel employé en appuyant sur 2 : ");
+        choixUser = scanner.nextInt();
+        ScannerUtils.skip();
+        if (choixUser == 1){
+            magasin.connectEmploye();
+        } else if (choixUser == 2){
+
+        }
         while (magasin.userConnected) {
             System.out.println("Que voulez-vous faire ?");
             System.out.println("1 : Gestion des clients");
@@ -957,7 +1071,7 @@ public class Magasin {
                 case 1:
                     System.out.println("1 : Ajouter un nouveau client");
                     System.out.println("2 : Modifier un client existant");
-                    System.out.println("3: Supprimer un client existant");
+                    System.out.println("3 : Supprimer un client existant");
                     choixUser2 = scanner.nextInt();
                     switch (choixUser2) {
                         case 1:
@@ -972,8 +1086,49 @@ public class Magasin {
                         default:
                             break;
                     }
+                    break;
+                case 2:
+                    System.out.println("1 : Ajouter un nouveau véhicule");
+                    System.out.println("2 : Modifier un véhicule existant");
+                    System.out.println("3 : Supprimer un véhicule existant");
+                    choixUser2 = scanner.nextInt();
+                    switch (choixUser2) {
+                        case 1:
+                            magasin.addVehicule();
+                            break;
+                        case 2:
+                            magasin.editVehicule();
+                            break;
+                        case 3:
+                            magasin.deleteVehicule();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case 3:
+                    magasin.creerDevis();
+                    break;
+                case 4:
+                    //TODO
+                    break;
+                default:
+                    break;
             }
-        }
+            System.out.println("Voulez-vous continuer ou vous déconnecter ?");
+            System.out.println("1 pour continuer, 2 pour arrêter");
+            System.out.println("choixUser = " + choixUser + ", choixUser2 = " + choixUser2 + ", choixUser3 = " + choixUser3);
 
+            while (choixUser3 != 1 && choixUser3 != 2){
+                choixUser3 = scanner.nextInt();
+                if (choixUser3 != 1 && choixUser3 != 2){
+                    System.out.println("Veuillez entrer un nombre valide");
+                }
+            }
+            if (choixUser3 == 2){
+                magasin.userConnected = false;
+            } else { }
+        }
+        System.out.println("Au revoir.");
     }
 }

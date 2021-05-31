@@ -20,6 +20,8 @@ public class Vehicule implements Cloneable {
     private boolean climatisation;
     private boolean estLoue;
     private boolean aDeplacer;
+    private boolean endommage;
+    private int pleins;
     private Agence agenceActuelle;
     private Client clientActuel;
     private Carburant carburant;
@@ -99,6 +101,22 @@ public class Vehicule implements Cloneable {
 
     public void setaDeplacer(boolean aDeplacer) {
         this.aDeplacer = aDeplacer;
+    }
+
+    public boolean isEndommage() {
+        return endommage;
+    }
+
+    public void setEndommage(boolean endommage) {
+        this.endommage = endommage;
+    }
+
+    public int getPleins() {
+        return pleins;
+    }
+
+    public void setPleins(int pleins) {
+        this.pleins = pleins;
     }
 
     public Agence getAgenceActuelle() {
@@ -289,7 +307,7 @@ public class Vehicule implements Cloneable {
     @Override
     public String toString() {
         return "Vehicule{" +
-                "ID=" + ID +
+                "ID=" + ID+1 +
                 ", marque='" + marque + '\'' +
                 ", modele='" + modele + '\'' +
                 ", kilometrage=" + kilometrage +

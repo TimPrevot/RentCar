@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -66,7 +67,7 @@ public class ReadValue {
                 vehicule.setaDeplacer(rs.getBoolean("aDeplacer"));
                 vehicule.setAgenceActuelleInt(rs.getInt("agenceActuelle"));
                 vehicule.setClientActuelInt(rs.getInt("clientActuel"));
-                vehicule.setCarburantInt(rs.getInt("carburantID"));
+                vehicule.setCarburantInt(rs.getInt("typeCarburant"));
                 vehicule.setCategorieInt(rs.getInt("categorie"));
                 vehicule.setNouvelleAgenceInt(rs.getInt("nouvelleAgence"));
                 listeVehicules.add(vehicule);
@@ -286,7 +287,7 @@ public class ReadValue {
     }
 
     public LocalDate dateToLocalDateConverter(Date dateToConvert) {
-        return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return Instant.ofEpochMilli(dateToConvert.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     public Date localDateToDateConverter(LocalDate dateToConvert) {

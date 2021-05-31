@@ -5,9 +5,9 @@ import java.sql.Statement;
 
 public class InsertValue {
 
-    public void main(String[] args) {
+    public static void main(String[] args) {
         InsertValue adder = new InsertValue();
-        adder.insertValue("maTable", "colonne", "valeurs");
+        adder.insertValue("Employes", "colonne", "valeurs");
     }
 
     public void insertValue(String table, String columns, String values) {

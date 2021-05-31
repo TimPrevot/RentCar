@@ -180,7 +180,7 @@ public class Client implements Cloneable {
     @Override
     public String toString() {
         return "Client{" +
-                "ID=" + ID +
+                "ID=" + ID+1 +
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", email='" + email + '\'' +
