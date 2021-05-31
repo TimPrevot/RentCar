@@ -1,5 +1,11 @@
 package projet;
 
+import connect_db.ReadValue;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
+
 public class Agence implements Cloneable{
 
     //Variables de classe
@@ -103,4 +109,12 @@ public class Agence implements Cloneable{
         result.setCoordonneesGPS(this.coordonneesGPS);
         return result;
     }
+
+    // WIP
+    public void loadVehicules(){
+        ReadValue reader = new ReadValue();
+        String query = "SELECT * FROM Vehicules";
+
+    }
+
 }
