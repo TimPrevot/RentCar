@@ -1,5 +1,6 @@
 package projet;
 
+import connect_db.DeleteValue;
 import connect_db.EditValue;
 import connect_db.InsertValue;
 
@@ -392,6 +393,8 @@ public class Magasin {
         scanner.close();
         System.out.println("Fin de l'édition");
     }
+
+    //Ajouter un client dans la BDD
     public void addClient(){
         InsertValue adder = new InsertValue();
         int choixEdit;
@@ -448,6 +451,24 @@ public class Magasin {
         adder.insertValueQuery(query);
         scanner.close();
     }
+
+    //Supprimer un client de la BDD
+    public void deleteClient(){
+        DeleteValue eraser = new DeleteValue();
+        int choixEdit ;
+        Scanner scanner = new Scanner(System.in);
+        afficherClients();
+        System.out.println("Selectionnez l'ID du client à supprimer");
+        choixEdit = scanner.nextInt();
+        for(Client client :listeClients){
+            if(choixEdit == client.getID()){
+                listeClients.remove(client);
+                eraser.deleteValue("Clients", "client_ID" + client.getID());
+            }
+        }
+    }
+
+    //Ajouter un véhicule dans la BDD
     public void addVehicule(){
         InsertValue adder = new InsertValue();
         int choixEdit;
@@ -506,6 +527,22 @@ public class Magasin {
             vehiculeAAjouter.setCategorie("choixEdit2");
         }
 
+        System.out.println("Sélectionnez le carburant du vehicule");
+        choixEdit2 = scanner.nextLine();
+        while (!choixEdit2.equals("SP98") || !choixEdit2.equals("SP95") || !choixEdit2.equals("Diesel")){
+            System.out.println("Veuillez entrer une valeur valide");
+            choixEdit2 = scanner.nextLine();
+        }
+        if (choixEdit2.equals("SP98") ){
+            vehiculeAAjouter.setCarburant("choixEdit2");
+        }
+        else if (choixEdit2.equals("SP95")){
+            vehiculeAAjouter.setCarburant("choixEdit2");
+        }
+        else if (choixEdit2.equals("Diesel")){
+            vehiculeAAjouter.setCarburant("choixEdit2");
+        }
+
 
         vehiculeAAjouter.setEstLoue(false);
         vehiculeAAjouter.setaDeplacer(false);
@@ -523,6 +560,7 @@ public class Magasin {
         scanner.close();
     }
 
+    //Editer les informations du véhicule
     public void editVehicule(){
         EditValue editor = new EditValue();
         boolean edit = true;
@@ -662,21 +700,59 @@ public class Magasin {
                 default:
                     break;
                 case 7:
-                    System.out.println("Veuillez entrer un numéro de téléphone :");
+                    System.out.println("Veuillez entrer le carburant :");
                     choixEdit2 = scanner.nextLine();
-                    clientAEditer.setTelephone(choixEdit2);
-                    for (Client client : listeClients) {
-                        if (client.getID() == clientAEditer.getID()) {
-                            client.setTelephone(choixEdit2);
+                    if (choixEdit2.equals("SP98") ){
+                        vehiculeAEditer.setCategorie(choixEdit2);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(choixEdit2);
+                            }
                         }
+                        editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
                     }
-                    editor.updateValues("Clients", "telephone", choixEdit2, "client_ID=" + clientAEditer.getID());
+                    else if (choixEdit2.equals("SP95")){
+                        vehiculeAEditer.setCategorie(choixEdit2);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(choixEdit2);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    else if (choixEdit2.equals("Diesel")){
+                        vehiculeAEditer.setCategorie(choixEdit2);
+                        for (Vehicule vehicule : listeVehicules) {
+                            if (vehicule.getID() == vehiculeAEditer.getID()) {
+                                vehicule.setCategorie(choixEdit2);
+                            }
+                        }
+                        editor.updateValues("Vehicules", "carburant", choixEdit2, "vehicule_ID=" + vehiculeAEditer.getID());
+                    }
+                    break;
+                default:
                     break;
             }
             System.out.println("Voulez-vous modifier une autre info ? O pour Oui, N pour Non");
             choixEdit2 = scanner.nextLine();
             if (choixEdit2.equals("N") || choixEdit2.equals("n")) {
                 edit = false;
+            }
+        }
+    }
+
+    //Supprimer un véhicule de la BDD
+    public void deleteVehicule(){
+        DeleteValue eraser = new DeleteValue();
+        int choixEdit ;
+        Scanner scanner = new Scanner(System.in);
+        afficherVehicules();
+        System.out.println("Selectionnez l'ID du vehicule à supprimer");
+        choixEdit = scanner.nextInt();
+        for(Vehicule vehicule :listeVehicules){
+            if(choixEdit == vehicule.getID()){
+                listeVehicules.remove(vehicule);
+                eraser.deleteValue("Vehicules", "vehicule_ID" + vehicule.getID());
             }
         }
     }
