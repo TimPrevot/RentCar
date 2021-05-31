@@ -7,6 +7,7 @@ import connect_db.InsertValue;
 import connect_db.ReadValue;
 import exceptions.BadInputException;
 
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ public class Magasin {
     private Vector<Agence> listeAgences;
     private Vector<ProgrammeFidelite> listeProgrammesFidelite;
     private Vector<Vehicule> listeLocations;
-    private Vector<Categorie> listeCategorie;
+    private Vector<Categorie> listeCategories;
     private Vector<Carburant> listeCarburants;
     private Vector<Devis> listeDevis;
     private boolean userConnected;
@@ -544,21 +545,21 @@ public class Magasin {
             choixEdit = scanner.nextInt();
         }
         if (choixEdit == 1){
-            for(Categorie categorie : listeCategorie){
+            for(Categorie categorie : listeCategories){
                 if(choixEdit == categorie.getID()){
                     vehiculeAAjouter.setCategorie(categorie);
                 }
             }
         }
         else if (choixEdit == 2){
-            for(Categorie categorie : listeCategorie){
+            for(Categorie categorie : listeCategories){
                 if(choixEdit == categorie.getID()){
                     vehiculeAAjouter.setCategorie(categorie);
                 }
             }
         }
         else if (choixEdit == 3){
-            for(Categorie categorie : listeCategorie){
+            for(Categorie categorie : listeCategories){
                 if(choixEdit == categorie.getID()){
                     vehiculeAAjouter.setCategorie(categorie);
                 }
@@ -717,7 +718,7 @@ public class Magasin {
                     afficherCategories();
                     choixEdit = scanner.nextInt();
                     if (choixEdit == 1){
-                        for(Categorie categorie : listeCategorie){
+                        for(Categorie categorie : listeCategories){
                             if(choixEdit == categorie.getID()){
                                 vehiculeAEditer.setCategorie(categorie);
                             }
@@ -730,7 +731,7 @@ public class Magasin {
                         editor.updateValuesInt("Vehicules", "categorie", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
                     }
                     else if (choixEdit == 2){
-                        for(Categorie categorie : listeCategorie){
+                        for(Categorie categorie : listeCategories){
                             if(choixEdit == categorie.getID()){
                                 vehiculeAEditer.setCategorie(categorie);
                             }
@@ -743,7 +744,7 @@ public class Magasin {
                         editor.updateValuesInt("Vehicules", "categorie", choixEdit, "vehicule_ID=" + vehiculeAEditer.getID());
                     }
                     else if (choixEdit == 3){
-                        for(Categorie categorie : listeCategorie){
+                        for(Categorie categorie : listeCategories){
                             if(choixEdit == categorie.getID()){
                                 vehiculeAEditer.setCategorie(categorie);
                             }
@@ -870,118 +871,82 @@ public class Magasin {
 
     public void loadData() {
         loadEmployes();
+        loadProgrammes();
         loadClients();
         loadVehicules();
         loadAgences();
-        loadProgrammes();
         loadCategories();
-        loadCarburants();
+        loadCarburant();
         loadDevis();
     }
 
     public void loadEmployes() {
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet rs = null;
-
-        ConnectDB connectDB = new ConnectDB();
-        connection = connectDB.get_Connection();
-        Vector<Employe> listeEmployes = new Vector<>();
-
-        try {
-            while (rs.next()) {
-                Employe employe = new Employe();
-                employe.setNom(rs.getString("nom"));
-                employe.setPrenom(rs.getString("prenom"));
-                employe.setEmail(rs.getString("email"));
-                employe.setRue(rs.getString("rue"));
-                employe.setVille(rs.getString("ville"));
-                employe.setCodePostal(rs.getString("codePostal"));
-                employe.setTelephone(rs.getString("telephone"));
-                employe.setLogin(rs.getString("login"));
-                employe.setPassword(rs.getString("password"));
-                employe.setEstChauffeur(rs.getBoolean("estChauffeur"));
-                listeEmployes.add(employe);
-            }
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-        }
+        Vector<Employe> listeEmployes;
+        ReadValue reader = new ReadValue();
+        listeEmployes = reader.readEmployes("SELECT * FROM Employes");
         this.listeEmployes = (Vector) listeEmployes.clone();
-
 
     }
 
     public void loadClients(){
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet rs = null;
-
-        ConnectDB connectDB = new ConnectDB();
-        connection = connectDB.get_Connection();
-        Vector<Client> listeClients = new Vector<>();
-
-        try {
-            statement = connection.createStatement();
-            rs = statement.executeQuery(query);
-
-            while (rs.next()){
-                Client client = new Client();
-                client.setNom(rs.getString("nom"));
-                client.setPrenom(rs.getString("prenom"));
-                client.setEmail(rs.getString("email"));
-                client.setRue(rs.getString("rue"));
-                client.setVille(rs.getString("ville"));
-                client.setCodePostal(rs.getString("codePostal"));
-                client.setTelephone(rs.getString("telephone"));
-                client.setClientFidele(rs.getBoolean("clientFidele");
-                client.setDateDebutFidele(this.);
-                listeClients.add(client);
-            }
-        } catch (SQLException sqle){
-            sqle.printStackTrace();
-        }
+        Vector<Client> listeClients;
+        ReadValue reader = new ReadValue();
+        listeClients = reader.readClient("SELECT * FROM Clients");
         this.listeClients = (Vector) listeClients.clone();
     }
 
     // WIP
     public void loadVehicules(){
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet rs = null;
-
-        ConnectDB connectDB = new ConnectDB();
-        connection = connectDB.get_Connection();
-        Vector<Vehicule> listeVehicules = new Vector<>();
-
-        try {
-            while (rs.next()) {
-                Vehicule vehicule = new Vehicule();
-                vehicule.setNom(rs.getString("nom"));
-                employe.setPrenom(rs.getString("prenom"));
-                employe.setEmail(rs.getString("email"));
-                employe.setRue(rs.getString("rue"));
-                employe.setVille(rs.getString("ville"));
-                employe.setCodePostal(rs.getString("codePostal"));
-                employe.setTelephone(rs.getString("telephone"));
-                employe.setLogin(rs.getString("login"));
-                employe.setPassword(rs.getString("password"));
-                employe.setEstChauffeur(rs.getBoolean("estChauffeur"));
-                listeEmployes.add(employe);
-            }
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-        }
+        Vector<Vehicule> listeVehicules;
+        ReadValue reader = new ReadValue();
+        listeVehicules = reader.readVehicules("SELECT * FROM Vehicules");
         this.listeVehicules = (Vector) listeVehicules.clone();
     }
 
+    public void loadAgences(){
+        Vector<Agence> listeAgences;
+        ReadValue reader = new ReadValue();
+        listeAgences = reader.readAgences("SELECT * FROM Agences");
+        this.listeAgences = (Vector) listeAgences.clone();
+    }
+
+    public void loadCarburant(){
+        Vector<Carburant> listeCarburants;
+        ReadValue reader = new ReadValue();
+        listeCarburants = reader.readCarburants("SELECT * FROM Carburants");
+        this.listeCarburants = (Vector) listeCarburants.clone();
+    }
+
+    public void loadProgrammes(){
+        Vector<ProgrammeFidelite> listeProgrammes;
+        ReadValue reader = new ReadValue();
+        listeProgrammes = reader.readProgrammes("SELECT * FROM ProgrammesFidelite");
+        this.listeProgrammesFidelite = (Vector) listeProgrammes.clone();
+    }
+
+    public void loadCategories() {
+        Vector<Categorie> listeCategories;
+        ReadValue reader = new ReadValue();
+        listeCategories = reader.readCategories("SELECT * FROM Categories");
+        this.listeCategories = (Vector) listeCategories.clone();
+    }
+
+    public void loadDevis() {
+        Vector<Devis> listeDevis;
+        ReadValue reader = new ReadValue();
+        listeDevis = reader.readDevis("SELECT * FROM Devis");
+        this.listeDevis = (Vector) listeDevis.clone();
+    }
+
     public void main(String[] args) {
+        Magasin magasin = new Magasin();
         Scanner scanner = new Scanner(System.in);
         int choixUser = 0, choixUser2 = 0;
         System.out.println("Bienvenue");
         System.out.println("Connectez-vous pour continuer :");
-        connectEmploye();
-        while (userConnected) {
-            laodData();
+        magasin.connectEmploye();
+        magasin.loadData();
+        while (magasin.userConnected) {
             System.out.println("Que voulez-vous faire ?");
             System.out.println("1 : Gestion des clients");
             System.out.println("2 : Gestion des véhicules");
@@ -996,16 +961,16 @@ public class Magasin {
                     choixUser2 = scanner.nextInt();
                     switch (choixUser2) {
                         case 1:
-                            addClient();
+                            magasin.addClient();
                             break;
                         case 2:
-                            editClient();
+                            magasin.editClient();
                             break;
                         case 3:
-                            deleteClient();
+                            magasin.deleteClient();
                             break;
-                        case 4:
-
+                        default:
+                            break;
                     }
             }
         }
